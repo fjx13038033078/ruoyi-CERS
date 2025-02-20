@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.university.mapper.MajorMapper">
+
+    <resultMap type="com.ruoyi.university.domain.Major" id="MajorResult">
+        <id property="majorId" column="major_id"/>
+        <result property="universityId" column="university_id"/>
+        <result property="majorName" column="major_name"/>
+        <result property="subject" column="subject"/>
+        <result property="minScore2024" column="min_score_2024"/>
+        <result property="description" column="description"/>
+    </resultMap>
+
+    <!-- 获取所有专业信息 -->
+    <select id="getAllMajors" resultMap="MajorResult">
+        SELECT * FROM cers_major
+    </select>
+
+    <!-- 根据专业ID获取专业信息 -->
+    <select id="getMajorById" parameterType="Long" resultMap="MajorResult">
+        SELECT * FROM cers_major WHERE major_id = #{majorId}
+    </select>
+
+    <!-- 根据学校ID获取该校所有专业信息 -->
+    <select id="getMajorsByUniversityId" parameterType="Long" resultMap="MajorResult">
+        SELECT * FROM cers_major WHERE university_id = #{universityId}
+    </select>
+
+    <!-- 添加专业信息 -->
+    <insert id="addMajor" parameterType="com.ruoyi.university.domain.Major">
+        INSERT INTO cers_major (university_id, major_name, subject, min_score_2024, description)
+        VALUES (#{universityId}, #{majorName}, #{subject}, #{minScore2024}, #{description})
+    </insert>
+
+    <!-- 更新专业信息 -->
+    <update id="updateMajor" parameterType="com.ruoyi.university.domain.Major">
+        UPDATE cers_major
+        SET university_id = #{universityId},
+            major_name = #{majorName},
+            subject = #{subject},
+            min_score_2024 = #{minScore2024},
+            description = #{description}
+        WHERE major_id = #{majorId}
+    </update>
+
+    <!-- 删除专业信息 -->
+    <delete id="deleteMajor" parameterType="Long">
+        DELETE FROM cers_major WHERE major_id = #{majorId}
+    </delete>
+
+</mapper>

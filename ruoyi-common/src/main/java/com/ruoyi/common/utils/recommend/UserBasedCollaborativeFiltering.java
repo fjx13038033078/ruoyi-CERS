@@ -1,5 +1,7 @@
 package com.ruoyi.common.utils.recommend;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -7,6 +9,7 @@ import java.util.stream.Collectors;
  * @Author 范佳兴
  * @date 2025/2/12 16:55
  */
+@Slf4j
 public class UserBasedCollaborativeFiltering {
     // 用户评分数据，Map存储用户对物品的评分，Map<用户ID(Long), Map<物品ID(Long), 评分(Double)>>
     private Map<Long, Map<Long, Double>> userRatings;
@@ -125,6 +128,7 @@ public class UserBasedCollaborativeFiltering {
                 break;
             }
         }
+        log.info("similarUsers:{}", similarUsers);
 
         // 获取相似用户喜欢的物品，进行推荐
         Map<Long, Double> recommendations = new HashMap<>();

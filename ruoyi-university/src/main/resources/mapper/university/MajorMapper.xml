@@ -26,6 +26,16 @@
         SELECT * FROM cers_major WHERE university_id = #{universityId}
     </select>
 
+    <!-- 根据多个专业ID查询专业信息 -->
+    <select id="selectByIds" parameterType="list" resultMap="MajorResult">
+        SELECT * FROM cers_major
+        WHERE major_id IN
+        <foreach collection="majorIds" item="majorId" open="(" separator="," close=")">
+            #{majorId}
+        </foreach>
+    </select>
+
+
     <!-- 添加专业信息 -->
     <insert id="addMajor" parameterType="com.ruoyi.university.domain.Major">
         INSERT INTO cers_major (university_id, major_name, subject, min_score_2024, description)

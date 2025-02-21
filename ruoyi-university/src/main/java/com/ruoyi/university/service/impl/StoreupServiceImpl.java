@@ -1,5 +1,6 @@
 package com.ruoyi.university.service.impl;
 
+import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.university.domain.Storeup;
 import com.ruoyi.university.mapper.StoreupMapper;
 import com.ruoyi.university.service.StoreupService;
@@ -26,6 +27,8 @@ public class StoreupServiceImpl implements StoreupService {
      */
     @Override
     public boolean addStoreup(Storeup storeup) {
+        Long userId = SecurityUtils.getUserId();
+        storeup.setUserId(userId);
         int rows = storeupMapper.addStoreup(storeup);
         return rows > 0;
     }

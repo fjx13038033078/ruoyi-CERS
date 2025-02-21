@@ -12,6 +12,23 @@
         <result property="actionTime" column="action_time"/>
     </resultMap>
 
+    <!-- 查询所有用户的行为记录，按userId, majorId, actionType过滤 -->
+    <select id="selectUserActions" resultType="map">
+        SELECT user_id, major_id, action_type
+        FROM cers_storeup
+        <where>
+            <if test="userId != null">
+                AND user_id = #{userId}
+            </if>
+            <if test="majorId != null">
+                AND major_id = #{majorId}
+            </if>
+            <if test="actionType != null">
+                AND action_type = #{actionType}
+            </if>
+        </where>
+    </select>
+
     <!-- 添加收藏 -->
     <insert id="addStoreup" parameterType="com.ruoyi.university.domain.Storeup">
         INSERT INTO cers_storeup (user_id, major_id, action_type, action_time)

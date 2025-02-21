@@ -2,6 +2,7 @@ package com.ruoyi.university.mapper;
 
 import com.ruoyi.university.domain.Major;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -33,6 +34,14 @@ public interface MajorMapper {
      * @return 专业信息列表
      */
     List<Major> getMajorsByUniversityId(Long universityId);
+
+    /**
+     * 根据多个专业ID查询专业信息
+     *
+     * @param majorIds 专业ID列表
+     * @return 专业信息列表
+     */
+    List<Major> selectByIds(@Param("majorIds") List<Long> majorIds);
 
     /**
      * 添加专业信息

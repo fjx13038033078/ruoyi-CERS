@@ -25,7 +25,7 @@
       </el-table-column>
       <el-table-column label="操作" align="center">
         <template #default="scope">
-          <el-button size="mini" @click="handleView(scope.row)" v-hasPermi="['university:feedback:view']">查看详情</el-button>
+          <el-button size="mini" @click="handleView(scope.row)">查看详情</el-button>
           <el-button type="danger" size="mini" @click="handleDelete(scope.row.feedbackId)" v-hasPermi="['university:feedback:delete']">删除</el-button>
         </template>
       </el-table-column>
@@ -90,6 +90,7 @@ import {
   addFeedback,
   deleteFeedback, replyFeedback,
 } from "@/api/university/feedback";
+import {recommendMajors} from "@/api/university/recommendation";
 
 export default {
   data() {
@@ -114,6 +115,7 @@ export default {
   },
   created() {
     this.fetchFeedbackList();
+    recommendMajors()
   },
   methods: {
     // 获取反馈列表

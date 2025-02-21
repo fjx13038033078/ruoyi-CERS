@@ -96,7 +96,9 @@
     <!-- 查看高校详情对话框 -->
     <el-dialog :visible.sync="viewDialogVisible" title="高校详情" width="60%">
       <!-- 新增专业按钮 -->
-      <el-button type="primary" @click="handleAddMajor(currentUniversityId)" style="margin-bottom: 20px;">新增专业</el-button>
+      <el-button type="primary" @click="handleAddMajor(currentUniversityId)" style="margin-bottom: 20px;"
+                 v-hasPermi="['university:major:add']">新增专业
+      </el-button>
       <!-- 专业列表 -->
       <el-table :data="majorList" v-loading="loadingMajors" border style="width: 100%">
         <el-table-column label="专业ID" prop="majorId" align="center"></el-table-column>
@@ -109,8 +111,10 @@
         <el-table-column label="2024投档线" prop="minScore2024" align="center"></el-table-column>
         <el-table-column label="操作" align="center" width="280px">
           <template #default="scope">
-            <el-button type="info" size="mini" @click="handleEditMajor(scope.row)">修改</el-button>
-            <el-button type="danger" size="mini" @click="handleDeleteMajor(scope.row)">删除</el-button>
+            <el-button type="warning" size="mini" @click="handleCollectMajor(scope.row.majorId)" v-hasPermi="['university:major:like']">收藏</el-button>
+            <el-button type="primary" size="mini" @click="handleViewMajor(scope.row)">查看</el-button>
+            <el-button type="info" size="mini" @click="handleEditMajor(scope.row)" v-hasPermi="['university:major:edit']">修改</el-button>
+            <el-button type="danger" size="mini" @click="handleDeleteMajor(scope.row)" v-hasPermi="['university:major:delete']">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -119,7 +123,7 @@
       </span>
     </el-dialog>
     <!-- 新增/编辑专业对话框 -->
-    <el-dialog :visible.sync="majorDialogVisible" :title="dialogTitle" width="500px">
+    <el-dialog :visible.sync="majorDialogVisible" :title="dialogTitle" width="400px">
       <el-form :model="majorForm" label-width="100px">
         <el-form-item label="专业名称">
           <el-input v-model="majorForm.majorName" placeholder="请输入专业名称" style="width: 200px"></el-input>
@@ -133,11 +137,39 @@
         <el-form-item label="2024年投档线">
           <el-input-number v-model="majorForm.minScore2024" :min="0" style="width: 200px;"></el-input-number>
         </el-form-item>
+        <el-form-item label="专业描述">
+          <el-input type="textarea" v-model="majorForm.description" placeholder="请输入专业描述"
+                    style="width: 200px"></el-input>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="majorDialogVisible = false">取消</el-button>
         <el-button type="primary" @click="handleSubmitMajor">{{ dialogButtonText }}</el-button>
       </div>
+    </el-dialog>
+
+    <!-- 查看专业详情对话框 -->
+    <el-dialog :visible.sync="majorDialogViewVisible" title="专业详情" width="400px">
+      <el-form :model="majorForm" label-width="100px">
+        <el-form-item label="专业名称" prop="majorName">
+          <el-input v-model="majorForm.majorName" placeholder="请输入专业名称" readonly style="width: 200px"></el-input>
+        </el-form-item>
+        <el-form-item label="报名科目" prop="subject">
+          <el-select v-model="majorForm.subject" placeholder="请选择报名科目" readonly style="width:200px">
+            <el-option label="文科" :value="1"></el-option>
+            <el-option label="理科" :value="2"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="2024年投档线" prop="minScore2024">
+          <el-input v-model="majorForm.minScore2024" readonly style="width: 200px;"></el-input>
+        </el-form-item>
+        <el-form-item label="专业描述" prop="description">
+          <el-input type="textarea" v-model="majorForm.description" readonly style="width: 200px"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="majorDialogViewVisible = false">关闭</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -153,6 +185,7 @@ import {
 import schoolTypeOptions from "@/api/university/schoolTypeOptions";
 import provinceOptions from "@/api/university/provinceOptions";
 import {addMajor, deleteMajor, listMajorsByUniversityId, updateMajor} from "@/api/university/major";
+import {addStoreup} from "@/api/university/storeup";
 
 export default {
   data() {
@@ -171,6 +204,7 @@ export default {
       },
       dialogVisible: false,
       viewDialogVisible: false,
+      majorDialogViewVisible: false,
       dialogTitle: "",
       dialogButtonText: "",
       universityForm: {
@@ -189,9 +223,14 @@ export default {
         majorName: "",
         subject: 1, // 默认文科
         minScore2024: 0,
+        description: ""
       },
       viewUniversityForm: {},
       currentUniversityId: null, // 用来存储当前查看的大学ID
+      storeupForm: {
+        majorId: null,
+        actionType: 2,
+      }
     };
   },
   created() {
@@ -215,7 +254,7 @@ export default {
     },
     // 查看高校详情
     handleView(row) {
-      this.viewUniversityForm = { ...row };
+      this.viewUniversityForm = {...row};
       this.fetchMajors(row.universityId);
       this.viewDialogVisible = true;
       // 在查看高校时传递对应的 universityId 给新增专业的按钮
@@ -291,11 +330,20 @@ export default {
       };
       this.majorDialogVisible = true;
     },
+    // 查看专业
+    handleViewMajor(major) {
+      addStoreup({
+        majorId: major.majorId,
+        actionType: 2,
+      })
+      this.majorForm = {...major}; // 复制专业信息到表单
+      this.majorDialogViewVisible = true;
+    },
     // 编辑专业
     handleEditMajor(major) {
       this.dialogTitle = "编辑专业";
       this.dialogButtonText = "保存";
-      this.majorForm = { ...major }; // 复制专业信息到表单
+      this.majorForm = {...major}; // 复制专业信息到表单
       this.majorDialogVisible = true;
     },
     // 提交新增或编辑的专业
@@ -318,6 +366,14 @@ export default {
         });
       });
     },
+    handleCollectMajor(majorId) {
+      addStoreup({
+        majorId: majorId,
+        actionType: 1,
+      }).then(() => {
+        this.$message.success("收藏成功");
+      });
+    }
   },
 };
 </script>

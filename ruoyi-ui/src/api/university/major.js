@@ -18,6 +18,15 @@ export function getMajor(majorId) {
   })
 }
 
+// 根据高校id查询专业列表
+export function listMajorsByUniversityId(universityId) {
+  return request({
+    url: '/university/major/listByUniversityId',
+    method: 'get',
+    params: { universityId }
+  })
+}
+
 // 添加专业信息
 export function addMajor(data) {
   return request({

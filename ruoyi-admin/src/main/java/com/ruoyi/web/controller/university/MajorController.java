@@ -43,6 +43,16 @@ public class MajorController extends BaseController {
     }
 
     /**
+     * 根据大学ID获取大学下的所有专业
+     * @param universityId 大学ID
+     * @return 专业列表
+     */
+    @GetMapping("/listByUniversityId")
+    public AjaxResult getMajorsByUniversityId(@RequestParam Long universityId) {
+        return success(majorService.getMajorsByUniversityId(universityId));
+    }
+
+    /**
      * 添加专业信息
      * @param major 待添加的专业信息
      * @return 操作结果

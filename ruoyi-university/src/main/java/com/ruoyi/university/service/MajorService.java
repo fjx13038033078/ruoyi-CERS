@@ -25,6 +25,14 @@ public interface MajorService {
     Major getMajorById(Long majorId);
 
     /**
+     * 根据大学ID获取大学下的专业信息
+     *
+     * @param universityId 大学ID
+     * @return 专业列表
+     */
+    List<Major> getMajorsByUniversityId(Long universityId);
+
+    /**
      * 添加专业信息
      *
      * @param major 待添加的专业信息

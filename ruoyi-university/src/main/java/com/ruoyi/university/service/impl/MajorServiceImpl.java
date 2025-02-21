@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -39,6 +40,17 @@ public class MajorServiceImpl implements MajorService {
     @Override
     public Major getMajorById(Long majorId) {
         return majorMapper.getMajorById(majorId);
+    }
+
+    /**
+     * 根据大学ID获取大学下的专业信息
+     *
+     * @param universityId 大学ID
+     * @return 专业列表
+     */
+    @Override
+    public List<Major> getMajorsByUniversityId(Long universityId) {
+        return majorMapper.getMajorsByUniversityId(universityId);
     }
 
     /**

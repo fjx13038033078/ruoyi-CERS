@@ -6,6 +6,7 @@ import com.ruoyi.university.domain.Major;
 import com.ruoyi.university.mapper.MajorMapper;
 import com.ruoyi.university.mapper.StoreupMapper;
 import com.ruoyi.university.service.MajorRecommendationService;
+import com.ruoyi.university.service.UniversityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,8 @@ public class MajorRecommendationServiceImpl implements MajorRecommendationServic
     private final MajorMapper majorMapper;
 
     private final StoreupMapper storeupMapper;
+
+    private final UniversityService universityService;
 
     @Override
     public List<Major> recommendMajors() {
@@ -60,9 +63,17 @@ public class MajorRecommendationServiceImpl implements MajorRecommendationServic
             // 获取推荐的专业详情
             List<Major> recommendedMajors = majorMapper.selectByIds(recommendedMajorIds);
             log.info("recommendedMajors:{}", recommendedMajors);
+            fillUniversityName(recommendedMajors);
             return recommendedMajors;
         }else {
             return Collections.emptyList();
+        }
+    }
+
+    private void fillUniversityName(List<Major> majors) {
+        for (Major major : majors) {
+            Long universityId = major.getUniversityId();
+            major.setUniversityName(universityService.getUniversityById(universityId).getUniversityName());
         }
     }
 }

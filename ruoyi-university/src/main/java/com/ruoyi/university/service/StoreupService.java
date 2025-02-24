@@ -2,6 +2,8 @@ package com.ruoyi.university.service;
 
 import com.ruoyi.university.domain.Storeup;
 
+import java.util.List;
+
 /**
  * @Author 范佳兴
  * @date 2025/2/21 11:03
@@ -22,4 +24,11 @@ public interface StoreupService {
      * @return 删除成功返回 true，否则返回 false
      */
     boolean deleteStoreup(Long storeupId);
+
+    /**
+     * 查询所有收藏
+     *
+     * @return 所有收藏信息列表
+     */
+    List<Storeup> selectAllStoreup();
 }

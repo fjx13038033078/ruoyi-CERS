@@ -25,7 +25,6 @@ public class MajorRecommendationController extends BaseController {
 
     private final MajorRecommendationService majorRecommendationService;
 
-
     /**
      * 获取推荐专业列表
      * @return

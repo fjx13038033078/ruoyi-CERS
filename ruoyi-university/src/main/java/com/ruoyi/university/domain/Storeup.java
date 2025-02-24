@@ -41,6 +41,36 @@ public class Storeup implements Serializable {
     private Long majorId;
 
     /**
+     * 专业名称
+     */
+    @TableField(exist = false)
+    private String majorName;
+
+    /**
+     * 学校名称
+     */
+    @TableField(exist = false)
+    private String universityName;
+
+    /**
+     * 报名科目（1-文科，2-理科）
+     */
+    @TableField(exist = false)
+    private Integer subject;
+
+    /**
+     * 2024年投档线
+     */
+    @TableField(exist = false)
+    private Integer minScore2024;
+
+    /**
+     * 描述
+     */
+    @TableField(exist = false)
+    private String description;
+
+    /**
      * 操作类型（1-收藏，2-浏览）
      */
     private Integer actionType;
@@ -48,6 +78,7 @@ public class Storeup implements Serializable {
     /**
      * 操作时间
      */
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime actionTime;
 
     @TableField(exist = false)

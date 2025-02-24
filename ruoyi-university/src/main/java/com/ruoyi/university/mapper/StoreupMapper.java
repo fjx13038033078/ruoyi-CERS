@@ -36,6 +36,19 @@ public interface StoreupMapper {
     Storeup selectStoreupById(Long storeupId);
 
     /**
+     * 根据用户ID获取收藏记录
+     * @param userId 用户ID
+     * @return 收藏记录列表
+     */
+    List<Storeup> selectStoreupByUserId(Long userId);
+
+    /**
+     * 获取所有收藏记录
+     * @return 收藏记录列表
+     */
+    List<Storeup> selectAllStoreup();
+
+    /**
      * 根据用户ID和专业ID获取收藏记录
      * @param userId 用户ID
      * @param majorId 专业ID

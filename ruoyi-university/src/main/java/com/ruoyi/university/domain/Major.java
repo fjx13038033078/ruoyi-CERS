@@ -32,6 +32,9 @@ public class Major implements Serializable {
      */
     private Long universityId;
 
+    @TableField(exist = false)
+    private String universityName;
+
     /**
      * 专业名称
      */

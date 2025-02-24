@@ -47,7 +47,17 @@
 
     <!-- 根据用户ID和专业ID获取收藏记录 -->
     <select id="selectStoreupByUserIdAndMajorId" parameterType="Long" resultMap="StoreupResult">
-        SELECT * FROM cers_storeup WHERE user_id = #{userId} AND major_id = #{majorId}
+        SELECT * FROM cers_storeup WHERE user_id = #{userId} AND major_id = #{majorId} and action_type = 1
+    </select>
+
+    <!-- 根据用户ID获取收藏记录 -->
+    <select id="selectStoreupByUserId" parameterType="Long" resultMap="StoreupResult">
+        SELECT * FROM cers_storeup WHERE user_id = #{userId} and action_type = 1
+    </select>
+
+    <!-- 获取全部收藏记录 -->
+    <select id="selectAllStoreup" resultMap="StoreupResult">
+        SELECT * FROM cers_storeup where action_type = 1
     </select>
 
 </mapper>

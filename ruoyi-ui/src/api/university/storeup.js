@@ -9,11 +9,20 @@ export function addStoreup(data) {
   })
 }
 
-// 删除收藏
+// 取消收藏
 export function deleteStoreup(storeupId) {
   return request({
     url: '/university/storeup/delete/',
     method: 'get',
     params: { storeupId }
+  })
+}
+
+// 查询收藏列表
+export function listStoreups(query) {
+  return request({
+    url: '/university/storeup/listAll',
+    method: 'get',
+    params: query
   })
 }

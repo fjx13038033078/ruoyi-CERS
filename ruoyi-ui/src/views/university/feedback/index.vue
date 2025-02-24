@@ -90,7 +90,6 @@ import {
   addFeedback,
   deleteFeedback, replyFeedback,
 } from "@/api/university/feedback";
-import {recommendMajors} from "@/api/university/recommendation";
 
 export default {
   data() {
@@ -115,7 +114,6 @@ export default {
   },
   created() {
     this.fetchFeedbackList();
-    recommendMajors()
   },
   methods: {
     // 获取反馈列表

@@ -29,6 +29,22 @@ public interface StoreupMapper {
     int deleteStoreup(Long storeupId);
 
     /**
+     * 根据用户ID获取收藏记录
+     * @param storeupId 收藏ID
+     * @return 收藏记录列表
+     */
+    Storeup selectStoreupById(Long storeupId);
+
+    /**
+     * 根据用户ID和专业ID获取收藏记录
+     * @param userId 用户ID
+     * @param majorId 专业ID
+     * @return 收藏记录列表
+     */
+    List<Storeup> selectStoreupByUserIdAndMajorId(@Param("userId")Long userId,
+                                                  @Param("majorId")Long majorId);
+
+    /**
      * 获取所有用户的行为记录（收藏、浏览），按userId, majorId, actionType过滤
      * @param userId 用户ID
      * @param majorId 专业ID

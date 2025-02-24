@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @Author 范佳兴
  * @date 2025/2/21 11:03
@@ -28,6 +30,12 @@ public class StoreupServiceImpl implements StoreupService {
     @Override
     public boolean addStoreup(Storeup storeup) {
         Long userId = SecurityUtils.getUserId();
+        if (storeup != null){
+            List<Storeup> storeups = storeupMapper.selectStoreupByUserIdAndMajorId(userId, storeup.getMajorId());
+            if (storeups.size() > 0){
+                throw new RuntimeException("该收藏已存在,无需重复收藏");
+            }
+        }
         storeup.setUserId(userId);
         int rows = storeupMapper.addStoreup(storeup);
         return rows > 0;

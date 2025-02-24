@@ -40,4 +40,14 @@
         DELETE FROM cers_storeup WHERE storeup_id = #{storeupId}
     </delete>
 
+    <!-- 根据主键查询 -->
+    <select id="selectStoreupById" parameterType="Long" resultMap="StoreupResult">
+        SELECT * FROM cers_storeup WHERE storeup_id = #{storeupId}
+    </select>
+
+    <!-- 根据用户ID和专业ID获取收藏记录 -->
+    <select id="selectStoreupByUserIdAndMajorId" parameterType="Long" resultMap="StoreupResult">
+        SELECT * FROM cers_storeup WHERE user_id = #{userId} AND major_id = #{majorId}
+    </select>
+
 </mapper>

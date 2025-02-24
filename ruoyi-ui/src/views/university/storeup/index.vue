@@ -161,20 +161,22 @@ export default {
 /* 推荐卡片列表 */
 .recommend-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* 降低 minmax 限制 */
+  grid-template-columns: repeat(2, 1fr);
   gap: 16px;
+  width: 100%; /* 新增 */
 }
 
 /* 单个推荐卡片 */
 .recommend-card {
-  width: 100%; /* 确保 Grid 控制宽度 */
+  width: 100%;
+  min-height: 80px;
   border-radius: 12px;
   background: #fff;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
-  display: flex;
-  align-items: center;
-  padding: 16px;
+  padding: 12px;
+  margin: 0; /* 修改此处 */
+  box-sizing: border-box; /* 新增 */
 }
 
 .recommend-card:hover {

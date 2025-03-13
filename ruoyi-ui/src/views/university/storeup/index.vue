@@ -2,19 +2,42 @@
   <div class="app-container">
     <!-- 专业推荐区域 -->
     <div class="recommend-container">
-      <h3 class="recommend-title">🎓 专业推荐</h3>
+      <div class="recommend-header">
+        <h3 class="recommend-title">🎓 为您推荐</h3>
+        <span class="recommend-subtitle">基于您的个人情况，我们为您精选以下专业</span>
+      </div>
+      
       <el-skeleton :loading="loadingRecommend" animated>
-        <div class="recommend-list">
-          <el-card v-for="(item, index) in recommendedMajors" :key="index" class="recommend-card">
-            <div class="card-content">
-              <div class="university-name">{{ item.universityName }}</div>
-              <div class="major-name">{{ item.majorName }}</div>
+        <template #default>
+          <div class="recommend-list">
+            <div v-for="(item, index) in recommendedMajors" 
+                 :key="index" 
+                 class="recommend-item">
+              <el-card class="recommend-card" shadow="hover">
+                <div class="card-content">
+                  <div class="university-tag" :class="getUniversityClass(item.universityLevel)">
+                    {{ getUniversityLabel(item.universityLevel) }}
+                  </div>
+                  <div class="university-name">{{ item.universityName }}</div>
+                  <div class="major-name">{{ item.majorName }}</div>
+                  <div class="score-info">
+                    <span class="score-label">2024分数线</span>
+                    <span class="score-value">{{ item.minScore2024 }}分</span>
+                  </div>
+                </div>
+              </el-card>
             </div>
-          </el-card>
-        </div>
+          </div>
+        </template>
       </el-skeleton>
     </div>
 
+    <!-- 收藏列表标题 -->
+    <div class="section-title">
+      <h3>我的收藏</h3>
+    </div>
+
+    <!-- 收藏列表表格 -->
     <el-table :data="storeupList" v-loading="loading" border style="width: 100%">
       <el-table-column label="收藏ID" prop="storeupId" align="center"></el-table-column>
       <el-table-column label="院校名称ID" prop="universityName" align="center"></el-table-column>
@@ -136,6 +159,25 @@ export default {
           this.loadingRecommend = false;
         });
     },
+    getUniversityLabel(level) {
+      const labels = {
+        0: '985院校',
+        1: '211院校',
+        2: '普通院校'
+      };
+      return labels[level] || '其他院校';
+    },
+    getUniversityClass(level) {
+      const classes = {
+        0: 'tag-985',
+        1: 'tag-211',
+        2: 'tag-normal'
+      };
+      return classes[level] || 'tag-normal';
+    },
+    handleStoreup(item) {
+      // Implementation of handleStoreup method
+    }
   },
 };
 </script>
@@ -143,59 +185,136 @@ export default {
 <style scoped>
 /* 推荐区域整体样式 */
 .recommend-container {
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   padding: 20px;
-  background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-  border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(145deg, #ffffff, #f5f7fa);
+  border-radius: 16px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
 }
 
-/* 标题样式 */
+/* 推荐头部样式 */
+.recommend-header {
+  margin-bottom: 20px;
+}
+
 .recommend-title {
-  font-size: 20px;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 10px;
+  font-size: 22px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0 0 8px 0;
+}
+
+.recommend-subtitle {
+  font-size: 14px;
+  color: #7f8c8d;
 }
 
 /* 推荐卡片列表 */
 .recommend-list {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-  width: 100%; /* 新增 */
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  padding: 5px;
 }
 
-/* 单个推荐卡片 */
-.recommend-card {
+.recommend-item {
   width: 100%;
-  min-height: 80px;
-  border-radius: 12px;
-  background: #fff;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
-  padding: 12px;
-  margin: 0; /* 修改此处 */
-  box-sizing: border-box; /* 新增 */
 }
 
-.recommend-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+.recommend-card {
+  height: 100%;
+}
+
+.recommend-card :deep(.el-card__body) {
+  padding: 12px;
+  height: 100%;
+}
+
+/* 大学标签样式 */
+.university-tag {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.tag-985 {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.tag-211 {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.tag-normal {
+  background-color: #f5f5f5;
+  color: #616161;
 }
 
 /* 大学名称 */
 .university-name {
-  font-size: 14px;
-  color: #666;
-  flex: 1;
+  font-size: 13px;
+  color: #606266;
+  margin-bottom: 6px;
+  margin-top: 20px;
 }
 
 /* 专业名称 */
 .major-name {
   font-size: 16px;
-  font-weight: bold;
-  color: #333;
+  font-weight: 600;
+  color: #303133;
+  margin-bottom: 12px;
+  line-height: 1.3;
 }
 
+/* 分数信息 */
+.score-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 8px;
+  border-top: 1px solid #ebeef5;
+  margin-top: auto;
+}
+
+.score-label {
+  font-size: 12px;
+  color: #909399;
+}
+
+.score-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #f56c6c;
+}
+
+/* 收藏列表标题 */
+.section-title {
+  margin: 30px 0 20px;
+}
+
+.section-title h3 {
+  font-size: 20px;
+  color: #2c3e50;
+  margin: 0;
+}
+
+/* 响应式布局 */
+@media screen and (max-width: 1200px) {
+  .recommend-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .recommend-list {
+    grid-template-columns: 1fr;
+  }
+}
 </style>

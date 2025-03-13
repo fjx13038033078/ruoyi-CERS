@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.university.mapper.InformationMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="InformationResult" type="com.ruoyi.university.domain.Information">
+        <id property="infoId" column="info_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="subject" column="subject"/>
+        <result property="universityLevel" column="university_level"/>
+        <result property="score" column="score"/>
+    </resultMap>
+
+    <!-- 查询所有用户高考信息 -->
+    <select id="selectAll" resultMap="InformationResult">
+        SELECT info_id, user_id, subject, university_level, score
+        FROM cers_information
+    </select>
+
+    <!-- 根据ID查询用户高考信息 -->
+    <select id="selectById" parameterType="Long" resultMap="InformationResult">
+        SELECT info_id, user_id, subject, university_level, score
+        FROM cers_information
+        WHERE info_id = #{infoId}
+    </select>
+
+    <!-- 根据用户ID查询用户高考信息 -->
+    <select id="selectByUserId" parameterType="Long" resultMap="InformationResult">
+        SELECT info_id, user_id, subject, university_level, score
+        FROM cers_information
+        WHERE user_id = #{userId}
+    </select>
+
+    <!-- 插入用户高考信息 -->
+    <insert id="insert" parameterType="com.ruoyi.university.domain.Information" useGeneratedKeys="true" keyProperty="infoId">
+        INSERT INTO cers_information (user_id, subject, university_level, score)
+        VALUES (#{userId}, #{subject}, #{universityLevel}, #{score})
+    </insert>
+
+    <!-- 更新用户高考信息 -->
+    <update id="update" parameterType="com.ruoyi.university.domain.Information">
+        UPDATE cers_information
+        SET user_id = #{userId},
+            subject = #{subject},
+            university_level = #{universityLevel},
+            score = #{score}
+        WHERE info_id = #{infoId}
+    </update>
+
+    <!-- 删除用户高考信息 -->
+    <delete id="deleteById" parameterType="Long">
+        DELETE FROM cers_information WHERE info_id = #{infoId}
+    </delete>
+
+</mapper>

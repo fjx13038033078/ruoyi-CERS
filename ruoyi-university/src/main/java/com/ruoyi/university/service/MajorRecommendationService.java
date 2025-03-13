@@ -15,4 +15,6 @@ public interface MajorRecommendationService {
      * @return 推荐的专业列表
      */
     List<Major> recommendMajors();
+
+    public List<Major> getCombinedRecommendations();
 }

@@ -110,6 +110,7 @@ export default {
       },
       viewDialogVisible: false,
       viewStoreupForm: {},
+      dialogVisible: false,  // 初始值设为 false
     };
   },
   created() {
@@ -155,6 +156,27 @@ export default {
         .finally(() => {
           this.loadingRecommend = false;
         });
+    },
+    fetchInfoList() {
+      this.loading = true;
+      listAllInformation(this.queryParams).then((response) => {
+        this.infoList = response.rows;
+        this.total = response.total;
+        
+        // 如果没有数据，则打开添加信息对话框
+        if (!this.infoList || this.infoList.length === 0) {
+          this.handleAddInfo();
+        }
+        
+        this.loading = false;
+      });
+    },
+    
+    handleAddInfo() {
+      this.dialogTitle = "新增报名信息";
+      this.dialogButtonText = "添加";
+      this.clearForm();
+      this.dialogVisible = true;
     },
   },
 };

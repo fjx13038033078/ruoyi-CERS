@@ -1,6 +1,7 @@
 package com.ruoyi.university.service.impl;
 
 import com.ruoyi.common.utils.SecurityUtils;
+import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.university.domain.Information;
 import com.ruoyi.university.mapper.InformationMapper;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,11 +25,23 @@ public class InformationServiceImpl implements InformationService {
 
     private final ISysUserService iSysUserService;
 
+    private final ISysRoleService iSysRoleService;
+
     @Override
     public List<Information> getAllInformation() {
-        List<Information> information = informationMapper.selectAll();
-        fillInformation(information);
-        return information;
+        Long userId = SecurityUtils.getUserId();
+        String role = iSysRoleService.selectStringRoleByUserId(userId);
+        if (role.equalsIgnoreCase("admin")) {
+            List<Information> information = informationMapper.selectAll();
+            fillInformation(information);
+            return information;
+        } else {
+            Information information = informationMapper.selectByUserId(userId);
+            List<Information> informations = new ArrayList<>();
+            informations.add(information);
+            fillInformation(informations);
+            return informations;
+        }
     }
 
     @Override
@@ -60,9 +74,11 @@ public class InformationServiceImpl implements InformationService {
     //填充用户名
     private void fillInformation(List<Information> informations) {
         for (Information information : informations) {
-            Long userId = information.getUserId();
-            String nickName = iSysUserService.selectUserById(userId).getNickName();
-            information.setUserName(nickName);
+            if (information != null) {
+                Long userId = information.getUserId();
+                String nickName = iSysUserService.selectUserById(userId).getNickName();
+                information.setUserName(nickName);
+            }
         }
     }
 }

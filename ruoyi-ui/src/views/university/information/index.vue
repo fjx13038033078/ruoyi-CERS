@@ -102,7 +102,7 @@
           pageNum: 1,
           pageSize: 10,
         },
-        dialogVisible: true,
+        dialogVisible: false,
         viewDialogVisible: false,
         dialogTitle: "",
         dialogButtonText: "添加",
@@ -133,6 +133,13 @@
         listAllInformation(this.queryParams).then((response) => {
           this.infoList = response.rows;
           this.total = response.total;
+          console.log("11111",this.infoList);
+          // 如果没有数据，则打开添加信息对话框
+          if (!this.infoList || 
+            this.infoList.length === 0 || 
+            (this.infoList.length === 1 && this.infoList[0] === null)) {
+          this.handleAddInfo();
+        }
           this.loading = false;
         });
       },

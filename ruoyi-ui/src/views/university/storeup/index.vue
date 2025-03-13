@@ -6,18 +6,15 @@
         <h3 class="recommend-title">🎓 为您推荐</h3>
         <span class="recommend-subtitle">基于您的个人情况，我们为您精选以下专业</span>
       </div>
-      
+
       <el-skeleton :loading="loadingRecommend" animated>
         <template #default>
           <div class="recommend-list">
-            <div v-for="(item, index) in recommendedMajors" 
-                 :key="index" 
+            <div v-for="(item, index) in recommendedMajors"
+                 :key="index"
                  class="recommend-item">
               <el-card class="recommend-card" shadow="hover">
                 <div class="card-content">
-                  <div class="university-tag" :class="getUniversityClass(item.universityLevel)">
-                    {{ getUniversityLabel(item.universityLevel) }}
-                  </div>
                   <div class="university-name">{{ item.universityName }}</div>
                   <div class="major-name">{{ item.majorName }}</div>
                   <div class="score-info">
@@ -159,25 +156,6 @@ export default {
           this.loadingRecommend = false;
         });
     },
-    getUniversityLabel(level) {
-      const labels = {
-        0: '985院校',
-        1: '211院校',
-        2: '普通院校'
-      };
-      return labels[level] || '其他院校';
-    },
-    getUniversityClass(level) {
-      const classes = {
-        0: 'tag-985',
-        1: 'tag-211',
-        2: 'tag-normal'
-      };
-      return classes[level] || 'tag-normal';
-    },
-    handleStoreup(item) {
-      // Implementation of handleStoreup method
-    }
   },
 };
 </script>

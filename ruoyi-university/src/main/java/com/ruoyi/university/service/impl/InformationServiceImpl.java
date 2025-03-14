@@ -57,6 +57,10 @@ public class InformationServiceImpl implements InformationService {
     @Override
     public boolean addInformation(Information information) {
         Long userId = SecurityUtils.getUserId();
+        Information information1 = informationMapper.selectByUserId(userId);
+        if (information1 != null){
+            throw new RuntimeException("您已填写过信息，请勿重复填写");
+        }
         information.setUserId(userId);
         return informationMapper.insert(information) > 0;
     }

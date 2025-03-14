@@ -10,20 +10,20 @@
       <el-skeleton :loading="loadingRecommend" animated>
         <template #default>
           <div class="recommend-list">
-            <div v-for="(item, index) in recommendedMajors"
-                 :key="index"
-                 class="recommend-item">
-              <el-card class="recommend-card" shadow="hover">
-                <div class="card-content">
-                  <div class="university-name">{{ item.universityName }}</div>
-                  <div class="major-name">{{ item.majorName }}</div>
-                  <div class="score-info">
-                    <span class="score-label">2024分数线</span>
-                    <span class="score-value">{{ item.minScore2024 }}分</span>
+            <el-row :gutter="20">
+              <el-col :span="8" v-for="(item, index) in recommendedMajors" :key="index">
+                <el-card class="recommend-card" shadow="hover">
+                  <div class="card-content">
+                    <div class="university-name">{{ item.universityName }}</div>
+                    <div class="major-name">{{ item.majorName }}</div>
+                    <div class="score-info">
+                      <span class="score-label">2024分数线</span>
+                      <span class="score-value">{{ item.minScore2024 }}分</span>
+                    </div>
                   </div>
-                </div>
-              </el-card>
-            </div>
+                </el-card>
+              </el-col>
+            </el-row>
           </div>
         </template>
       </el-skeleton>
@@ -211,22 +211,17 @@ export default {
 
 /* 推荐卡片列表 */
 .recommend-list {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
-  padding: 5px;
-}
-
-.recommend-item {
   width: 100%;
 }
 
 .recommend-card {
+  margin-bottom: 20px;
   height: 100%;
 }
 
-.recommend-card :deep(.el-card__body) {
-  padding: 12px;
+.card-content {
+  display: flex;
+  flex-direction: column;
   height: 100%;
 }
 

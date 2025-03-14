@@ -12,8 +12,23 @@
     </resultMap>
 
     <!-- 获取所有专业信息 -->
-    <select id="getAllMajors" resultMap="MajorResult">
+    <!-- 根据条件查询专业信息 -->
+    <select id="getAllMajors" parameterType="map" resultMap="MajorResult">
         SELECT * FROM cers_major
+        WHERE 1=1
+        <if test="keyword != null and keyword != ''">
+            AND major_name LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        <if test="subject != null">
+            AND subject = #{subject}
+        </if>
+        <if test="minScore != null and minScore > 0">
+            AND min_score_2024 &gt;= #{minScore}
+        </if>
+        <if test="maxScore != null and maxScore > 0">
+            AND min_score_2024 &lt;= #{maxScore}
+        </if>
+        ORDER BY min_score_2024
     </select>
 
     <!-- 根据专业ID获取专业信息 -->

@@ -56,5 +56,14 @@ public class Major implements Serializable {
     private String description;
 
     @TableField(exist = false)
+    private String keyword;
+
+    @TableField(exist = false)
+    private int minScore;
+
+    @TableField(exist = false)
+    private int maxScore;
+
+    @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

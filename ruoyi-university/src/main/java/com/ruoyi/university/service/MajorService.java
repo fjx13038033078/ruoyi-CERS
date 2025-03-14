@@ -14,7 +14,7 @@ public interface MajorService {
      *
      * @return 专业列表
      */
-    List<Major> getAllMajors();
+    List<Major> getAllMajors(Major major);
 
     /**
      * 根据专业ID获取专业信息

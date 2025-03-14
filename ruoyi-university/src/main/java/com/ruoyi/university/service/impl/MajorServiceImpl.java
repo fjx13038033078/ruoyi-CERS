@@ -1,8 +1,10 @@
 package com.ruoyi.university.service.impl;
 
 import com.ruoyi.university.domain.Major;
+import com.ruoyi.university.domain.University;
 import com.ruoyi.university.mapper.MajorMapper;
 import com.ruoyi.university.service.MajorService;
+import com.ruoyi.university.service.UniversityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,14 +23,18 @@ public class MajorServiceImpl implements MajorService {
 
     private final MajorMapper majorMapper;
 
+    private final UniversityService universityService;
+
     /**
      * 获取所有专业信息
      *
      * @return 专业列表
      */
     @Override
-    public List<Major> getAllMajors() {
-        return majorMapper.getAllMajors();
+    public List<Major> getAllMajors(Major major) {
+        List<Major> allMajors = majorMapper.getAllMajors(major);
+        fillMajorInfo(allMajors);
+        return allMajors;
     }
 
     /**
@@ -88,4 +94,17 @@ public class MajorServiceImpl implements MajorService {
         int rows = majorMapper.deleteMajor(majorId);
         return rows > 0;
     }
+
+    private void fillMajorInfo(List<Major> majors) {
+        for (Major major : majors) {
+            Long universityId = major.getUniversityId();
+            if (universityId != null) {
+                University university = universityService.getUniversityById(universityId);
+                if (university != null) {
+                    major.setUniversityName(university.getUniversityName());
+                }
+            }
+        }
+    }
+
 }

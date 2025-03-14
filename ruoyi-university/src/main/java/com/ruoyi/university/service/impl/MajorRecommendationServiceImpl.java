@@ -109,7 +109,7 @@ public class MajorRecommendationServiceImpl implements MajorRecommendationServic
         }
 
         // 获取所有专业信息
-        List<Major> allMajors = majorMapper.getAllMajors();
+        List<Major> allMajors = majorMapper.getAllMajors(null);
 
         // 获取所有高校信息，并转换为 Map<universityId, University>
         List<University> allUniversities = universityService.getAllUniversities();

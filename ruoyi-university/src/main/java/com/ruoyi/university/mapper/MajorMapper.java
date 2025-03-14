@@ -17,7 +17,7 @@ public interface MajorMapper {
      *
      * @return 专业信息列表
      */
-    List<Major> getAllMajors();
+    List<Major> getAllMajors(Major major);
 
     /**
      * 根据专业ID获取专业信息

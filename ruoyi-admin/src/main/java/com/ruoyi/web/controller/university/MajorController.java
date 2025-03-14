@@ -26,9 +26,9 @@ public class MajorController extends BaseController {
      * @return 专业列表
      */
     @GetMapping("/listAll")
-    public TableDataInfo listAllMajors() {
+    public TableDataInfo listAllMajors(Major major) {
         startPage();
-        List<Major> allMajors = majorService.getAllMajors();
+        List<Major> allMajors = majorService.getAllMajors(major);
         return getDataTable(allMajors);
     }
 

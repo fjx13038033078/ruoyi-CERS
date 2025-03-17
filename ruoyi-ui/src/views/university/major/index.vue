@@ -31,6 +31,15 @@
         </template>
       </el-table-column>
       <el-table-column label="分数线" prop="minScore2024" align="center"></el-table-column>
+      <el-table-column label="操作" align="center" width="220">
+        <template #default="scope">
+          <el-button
+            type="success"
+            size="mini"
+            @click="handleStoreup(scope.row)"
+          >收藏</el-button>
+        </template>
+      </el-table-column>
     </el-table>
 
     <!-- 分页组件 -->
@@ -46,6 +55,7 @@
 
 <script>
 import { listMajors } from "@/api/university/major";
+import { addStoreup } from "@/api/university/storeup";
 
 export default {
   data() {
@@ -94,6 +104,15 @@ export default {
         maxScore: null,
       };
       this.handleSearch(); // 重置后重新加载数据
+    },
+    handleStoreup(row) {
+      const data = {
+        majorId: row.majorId,
+        actionType: 1,
+      };
+      addStoreup(data).then(() => {
+        this.$message.success("收藏成功");
+      });
     }
   }
 };

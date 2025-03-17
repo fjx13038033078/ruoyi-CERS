@@ -130,13 +130,22 @@ public class UserBasedCollaborativeFiltering {
         }
         log.info("similarUsers:{}", similarUsers);
 
+        // **提前获取 targetUser 的评分数据，防止 NullPointerException**
+        Map<Long, Double> targetUserRatings = userRatings.get(targetUser);
+        if (targetUserRatings == null) {
+            targetUserRatings = new HashMap<>(); // 避免 NullPointerException
+        }
+
         // 获取相似用户喜欢的物品，进行推荐
         Map<Long, Double> recommendations = new HashMap<>();
         for (Long user : similarUsers) {
             Map<Long, Double> ratings = userRatings.get(user);
+            if (ratings == null) {
+                continue; // 防止 NullPointerException
+            }
             for (Long item : ratings.keySet()) {
-                // 如果目标用户没有评价该物品，加入推荐列表
-                if (!userRatings.get(targetUser).containsKey(item)) {
+                // **检查目标用户是否已经评价该物品**
+                if (!targetUserRatings.containsKey(item)) {
                     recommendations.put(item, ratings.get(item));
                 }
             }

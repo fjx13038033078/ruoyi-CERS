@@ -49,7 +49,7 @@ public class StoreupController extends BaseController {
      * @param storeupId 收藏id
      * @return 操作结果
      */
-    @PostMapping("/delete")
+    @GetMapping("/delete")
     public AjaxResult deleteStoreup(@RequestParam Long storeupId) {
         return toAjax(storeupService.deleteStoreup(storeupId));
     }

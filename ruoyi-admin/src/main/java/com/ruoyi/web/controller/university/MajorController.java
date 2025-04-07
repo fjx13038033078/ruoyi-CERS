@@ -6,6 +6,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.university.domain.Major;
 import com.ruoyi.university.service.MajorService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/university/major")
+@Slf4j
 public class MajorController extends BaseController {
 
     private final MajorService majorService;
@@ -27,6 +29,7 @@ public class MajorController extends BaseController {
      */
     @GetMapping("/listAll")
     public TableDataInfo listAllMajors(Major major) {
+        log.info("获取所有专业列表",major);
         startPage();
         List<Major> allMajors = majorService.getAllMajors(major);
         return getDataTable(allMajors);

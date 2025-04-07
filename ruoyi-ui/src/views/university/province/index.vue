@@ -14,8 +14,8 @@
       <el-table-column label="省内高校总数" prop="numTotal" align="center"></el-table-column>
       <el-table-column label="985高校数量" prop="num985" align="center"></el-table-column>
       <el-table-column label="211高校数量" prop="num211" align="center"></el-table-column>
-      <el-table-column label="2024文科最低投档线" prop="minScoreLiberal" align="center"></el-table-column>
-      <el-table-column label="2024理科最低投档线" prop="minScoreScience" align="center"></el-table-column>
+      <el-table-column label="2024历史类最低投档线" prop="minScoreLiberal" align="center"></el-table-column>
+      <el-table-column label="2024理物理类最低投档线" prop="minScoreScience" align="center"></el-table-column>
       <el-table-column label="操作" align="center" width="280px">
         <template #default="scope">
           <el-button type="info" size="mini" @click="handleView(scope.row)">查看</el-button>
@@ -51,10 +51,10 @@
         <el-form-item label="211高校数量">
           <el-input-number v-model="provinceForm.num211" :min="0"></el-input-number>
         </el-form-item>
-        <el-form-item label="2024文科最低投档线">
+        <el-form-item label="2024历史类最低投档线">
           <el-input-number v-model="provinceForm.minScoreLiberal" :min="0"></el-input-number>
         </el-form-item>
-        <el-form-item label="2024理科最低投档线">
+        <el-form-item label="2024物理类最低投档线">
           <el-input-number v-model="provinceForm.minScoreScience" :min="0"></el-input-number>
         </el-form-item>
       </el-form>
@@ -79,10 +79,10 @@
         <el-form-item label="211高校数量">
           <el-input v-model="viewProvinceForm.num211" disabled></el-input>
         </el-form-item>
-        <el-form-item label="2024文科最低投档线">
+        <el-form-item label="2024历史类最低投档线">
           <el-input v-model="viewProvinceForm.minScoreLiberal" disabled></el-input>
         </el-form-item>
-        <el-form-item label="2024理科最低投档线">
+        <el-form-item label="2024物理类最低投档线">
           <el-input v-model="viewProvinceForm.minScoreScience" disabled></el-input>
         </el-form-item>
       </el-form>

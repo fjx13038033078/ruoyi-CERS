@@ -73,7 +73,7 @@ export default {
             const num211 = data?.num211 || "暂无数据";
             const minScoreLiberal = data?.minScoreLiberal || "暂无数据";
             const minScoreScience = data?.minScoreScience || "暂无数据";
-            return `${name}<br/>省内高校总数：${value}<br/>省内985高校：${num985}<br/>省内211高校：${num211}<br/>2024文科最低投档线：${minScoreLiberal}<br/>2024理科最低投档线：${minScoreScience}`;
+            return `${name}<br/>省内高校总数：${value}<br/>省内985高校：${num985}<br/>省内211高校：${num211}<br/>2024历史类最低投档线：${minScoreLiberal}<br/>2024物理类最低投档线：${minScoreScience}`;
           },
         },
         visualMap: {

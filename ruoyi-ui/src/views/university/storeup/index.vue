@@ -41,7 +41,7 @@
       <el-table-column label="专业名称" prop="majorName" align="center"></el-table-column>
       <el-table-column label="报名科目" prop="subject" align="center">
         <template #default="scope">
-          <span>{{ scope.row.subject === 1 ? '文科' : '理科' }}</span>
+          <span>{{ scope.row.subject === 1 ? '历史类' : '物理类' }}</span>
         </template>
       </el-table-column>
       <el-table-column label="2024投档线" prop="minScore2024" align="center"></el-table-column>
@@ -73,7 +73,7 @@
           <el-input v-model="viewStoreupForm.majorName" readonly></el-input>
         </el-form-item>
         <el-form-item label="报名科目">
-          <el-input :value="viewStoreupForm.subject === 1 ? '文科' : '理科'" readonly></el-input>
+          <el-input :value="viewStoreupForm.subject === 1 ? '历史类' : '物理类'" readonly></el-input>
         </el-form-item>
         <el-form-item label="2024最低投档线">
           <el-input v-model="viewStoreupForm.minScore2024" readonly></el-input>
@@ -162,16 +162,16 @@ export default {
       listAllInformation(this.queryParams).then((response) => {
         this.infoList = response.rows;
         this.total = response.total;
-        
+
         // 如果没有数据，则打开添加信息对话框
         if (!this.infoList || this.infoList.length === 0) {
           this.handleAddInfo();
         }
-        
+
         this.loading = false;
       });
     },
-    
+
     handleAddInfo() {
       this.dialogTitle = "新增报名信息";
       this.dialogButtonText = "添加";

@@ -41,7 +41,7 @@ public class Major implements Serializable {
     private String majorName;
 
     /**
-     * 报名科目（1-文科，2-理科）
+     * 报名科目（1-历史类，2-物理类）
      */
     private Integer subject;
 

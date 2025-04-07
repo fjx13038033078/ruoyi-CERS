@@ -7,8 +7,8 @@
       </el-form-item>
       <el-form-item label="所学科目">
         <el-select v-model="searchParams.subject" placeholder="请选择">
-          <el-option label="文科" :value="1"></el-option>
-          <el-option label="理科" :value="2"></el-option>
+          <el-option label="历史类" :value="1"></el-option>
+          <el-option label="物理类" :value="2"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="分数线范围">
@@ -27,7 +27,7 @@
       <el-table-column label="院校名称" prop="universityName" align="center"></el-table-column>
       <el-table-column label="所学科目" prop="subject" align="center">
         <template #default="scope">
-          <span>{{ scope.row.subject === 1 ? '文科' : '理科' }}</span>
+          <span>{{ scope.row.subject === 1 ? '历史类' : '物理类' }}</span>
         </template>
       </el-table-column>
       <el-table-column label="分数线" prop="minScore2024" align="center"></el-table-column>

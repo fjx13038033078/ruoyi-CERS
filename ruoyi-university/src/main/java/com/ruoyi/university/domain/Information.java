@@ -39,7 +39,7 @@ public class Information implements Serializable {
     private String userName;
 
     /**
-     * 用户学科（1-文科，2-理科）
+     * 用户学科（1-历史类，2-物理类）
      */
     private Integer subject;
 

@@ -26,8 +26,8 @@
           <span>{{ scope.row.is211 === 1 ? '是' : '否' }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="2024文科最低投档线" prop="minScoreLiberal" align="center"></el-table-column>
-      <el-table-column label="2024理科最低投档线" prop="minScoreScience" align="center"></el-table-column>
+      <el-table-column label="2024历史类最低投档线" prop="minScoreLiberal" align="center"></el-table-column>
+      <el-table-column label="2024物理类最低投档线" prop="minScoreScience" align="center"></el-table-column>
       <el-table-column label="操作" align="center" width="280px">
         <template #default="scope">
           <el-button type="info" size="mini" @click="handleView(scope.row)">查看</el-button>
@@ -80,10 +80,10 @@
           <el-switch v-model="universityForm.is211" :active-value="1" :inactive-value="0" active-text="是"
                      inactive-text="否"></el-switch>
         </el-form-item>
-        <el-form-item label="2024文科最低投档线">
+        <el-form-item label="2024历史类最低投档线">
           <el-input-number v-model="universityForm.minScoreLiberal" :min="0"></el-input-number>
         </el-form-item>
-        <el-form-item label="2024理科最低投档线">
+        <el-form-item label="2024物理类最低投档线">
           <el-input-number v-model="universityForm.minScoreScience" :min="0"></el-input-number>
         </el-form-item>
       </el-form>
@@ -105,7 +105,7 @@
         <el-table-column label="专业名称" prop="majorName" align="center"></el-table-column>
         <el-table-column label="报名科目" align="center">
           <template #default="scope">
-            <span>{{ scope.row.subject === 1 ? '文科' : '理科' }}</span>
+            <span>{{ scope.row.subject === 1 ? '历史类' : '物理类' }}</span>
           </template>
         </el-table-column>
         <el-table-column label="2024投档线" prop="minScore2024" align="center"></el-table-column>
@@ -130,8 +130,8 @@
         </el-form-item>
         <el-form-item label="报名科目">
           <el-select v-model="majorForm.subject" placeholder="请选择报名科目" style="width:200px">
-            <el-option label="文科" :value="1"></el-option>
-            <el-option label="理科" :value="2"></el-option>
+            <el-option label="历史类" :value="1"></el-option>
+            <el-option label="物理类" :value="2"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="2024年投档线">
@@ -156,8 +156,8 @@
         </el-form-item>
         <el-form-item label="报名科目" prop="subject">
           <el-select v-model="majorForm.subject" placeholder="请选择报名科目" readonly style="width:200px">
-            <el-option label="文科" :value="1"></el-option>
-            <el-option label="理科" :value="2"></el-option>
+            <el-option label="历史类" :value="1"></el-option>
+            <el-option label="物理类" :value="2"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="2024年投档线" prop="minScore2024">
@@ -221,7 +221,7 @@ export default {
       majorForm: { // 专业表单数据
         universityId: null,
         majorName: "",
-        subject: 1, // 默认文科
+        subject: 1, // 默认历史类
         minScore2024: 0,
         description: ""
       },
@@ -325,7 +325,7 @@ export default {
       this.majorForm = {
         universityId: universityId,
         majorName: "",
-        subject: 1, // 默认文科
+        subject: 1, // 默认历史类
         minScore2024: 0,
       };
       this.majorDialogVisible = true;

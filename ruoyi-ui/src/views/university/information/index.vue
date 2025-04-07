@@ -6,14 +6,14 @@
           <el-button type="primary" @click="handleAddInfo" v-hasPermi="['university:information:add']">新增报名信息</el-button>
         </el-col>
       </el-row>
-  
+
       <!-- 信息列表 -->
       <el-table :data="infoList" v-loading="loading" border style="width: 100%">
         <el-table-column label="信息ID" prop="infoId" align="center"></el-table-column>
         <el-table-column label="用户名" prop="userName" align="center"></el-table-column>
         <el-table-column label="学科类型" prop="subject" align="center">
           <template #default="scope">
-            {{ scope.row.subject === 1 ? '文科' : '理科' }}
+            {{ scope.row.subject === 1 ? '历史类' : '物理类' }}
           </template>
         </el-table-column>
         <el-table-column label="目标高校水平" prop="universityLevel" align="center">
@@ -30,7 +30,7 @@
           </template>
         </el-table-column>
       </el-table>
-  
+
       <!-- 分页组件 -->
       <pagination
         v-show="total > 0"
@@ -39,14 +39,14 @@
         :limit.sync="queryParams.pageSize"
         @pagination="fetchInfoList"
       />
-  
+
       <!-- 添加/编辑信息对话框 -->
       <el-dialog :visible.sync="dialogVisible" :title="dialogTitle" width="500px">
         <el-form :model="infoForm" label-width="120px">
           <el-form-item label="学科类型">
             <el-select v-model="infoForm.subject" placeholder="请选择学科类型">
-              <el-option label="文科" :value="1"></el-option>
-              <el-option label="理科" :value="2"></el-option>
+              <el-option label="历史类" :value="1"></el-option>
+              <el-option label="物理类" :value="2"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="目标高校水平">
@@ -65,7 +65,7 @@
           <el-button type="primary" @click="handleSubmit">{{ dialogButtonText }}</el-button>
         </div>
       </el-dialog>
-  
+
       <!-- 查看信息详情对话框 -->
       <el-dialog :visible.sync="viewDialogVisible" title="报名信息详情" width="40%">
         <el-form :model="viewInfoForm" label-width="120px">
@@ -73,7 +73,7 @@
             <el-input v-model="viewInfoForm.userName" disabled></el-input>
           </el-form-item>
           <el-form-item label="学科类型">
-            <el-input :value="viewInfoForm.subject === 1 ? '文科' : '理科'" disabled></el-input>
+            <el-input :value="viewInfoForm.subject === 1 ? '历史类' : '物理类'" disabled></el-input>
           </el-form-item>
           <el-form-item label="目标高校水平">
             <el-input :value="getLevelLabel(viewInfoForm.universityLevel)" disabled></el-input>
@@ -88,10 +88,10 @@
       </el-dialog>
     </div>
   </template>
-  
+
   <script>
   import { listAllInformation, getInformation, addInformation, updateInformation, deleteInformation } from "@/api/university/information";
-  
+
   export default {
     data() {
       return {
@@ -135,8 +135,8 @@
           this.total = response.total;
           console.log("11111",this.infoList);
           // 如果没有数据，则打开添加信息对话框
-          if (!this.infoList || 
-            this.infoList.length === 0 || 
+          if (!this.infoList ||
+            this.infoList.length === 0 ||
             (this.infoList.length === 1 && this.infoList[0] === null)) {
           this.handleAddInfo();
         }
@@ -191,7 +191,7 @@
     }
   };
   </script>
-  
+
   <style scoped>
   .mb-20 {
     margin-bottom: 20px;

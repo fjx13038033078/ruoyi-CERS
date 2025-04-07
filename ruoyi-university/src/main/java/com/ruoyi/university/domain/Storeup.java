@@ -53,7 +53,7 @@ public class Storeup implements Serializable {
     private String universityName;
 
     /**
-     * 报名科目（1-文科，2-理科）
+     * 报名科目（1-历史类，2-物理类）
      */
     @TableField(exist = false)
     private Integer subject;

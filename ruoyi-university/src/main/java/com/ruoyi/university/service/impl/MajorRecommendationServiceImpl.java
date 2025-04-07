@@ -135,7 +135,7 @@ public class MajorRecommendationServiceImpl implements MajorRecommendationServic
             return Collections.emptyList();
         }
 
-        // 过滤出符合用户学科类别（文科/理科）的专业
+        // 过滤出符合用户学科类别（历史类/物理类）的专业
         List<Major> filteredBySubject = majorList.stream()
                 .filter(major -> major.getSubject().equals(userInfo.getSubject()))
                 .collect(Collectors.toList());

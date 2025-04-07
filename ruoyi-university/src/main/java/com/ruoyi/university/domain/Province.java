@@ -48,12 +48,12 @@ public class Province implements Serializable {
     private Integer num211;
 
     /**
-     * 2024年文科最低投档线
+     * 2024年历史类最低投档线
      */
     private Integer minScoreLiberal;
 
     /**
-     * 2024年理科最低投档线
+     * 2024年物理类最低投档线
      */
     private Integer minScoreScience;
 

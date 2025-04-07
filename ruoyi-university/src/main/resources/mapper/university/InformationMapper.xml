@@ -9,32 +9,45 @@
         <result property="subject" column="subject"/>
         <result property="universityLevel" column="university_level"/>
         <result property="score" column="score"/>
+        <result property="universityType" column="university_type"/>
+        <result property="idealMajorDirection" column="ideal_major_direction"/>
+        <result property="regionPreference" column="region_preference"/>
+        <result property="dailyInterest" column="daily_interest"/>
     </resultMap>
 
     <!-- 查询所有用户高考信息 -->
     <select id="selectAll" resultMap="InformationResult">
-        SELECT info_id, user_id, subject, university_level, score
+        SELECT info_id, user_id, subject, university_level, score,
+               university_type, ideal_major_direction, region_preference, daily_interest
         FROM cers_information
     </select>
 
     <!-- 根据ID查询用户高考信息 -->
     <select id="selectById" parameterType="Long" resultMap="InformationResult">
-        SELECT info_id, user_id, subject, university_level, score
+        SELECT info_id, user_id, subject, university_level, score,
+               university_type, ideal_major_direction, region_preference, daily_interest
         FROM cers_information
         WHERE info_id = #{infoId}
     </select>
 
     <!-- 根据用户ID查询用户高考信息 -->
     <select id="selectByUserId" parameterType="Long" resultMap="InformationResult">
-        SELECT info_id, user_id, subject, university_level, score
+        SELECT info_id, user_id, subject, university_level, score,
+               university_type, ideal_major_direction, region_preference, daily_interest
         FROM cers_information
         WHERE user_id = #{userId}
     </select>
 
     <!-- 插入用户高考信息 -->
     <insert id="insert" parameterType="com.ruoyi.university.domain.Information" useGeneratedKeys="true" keyProperty="infoId">
-        INSERT INTO cers_information (user_id, subject, university_level, score)
-        VALUES (#{userId}, #{subject}, #{universityLevel}, #{score})
+        INSERT INTO cers_information (
+            user_id, subject, university_level, score,
+            university_type, ideal_major_direction, region_preference, daily_interest
+        )
+        VALUES (
+                   #{userId}, #{subject}, #{universityLevel}, #{score},
+                   #{universityType}, #{idealMajorDirection}, #{regionPreference}, #{dailyInterest}
+               )
     </insert>
 
     <!-- 更新用户高考信息 -->
@@ -43,7 +56,11 @@
         SET user_id = #{userId},
             subject = #{subject},
             university_level = #{universityLevel},
-            score = #{score}
+            score = #{score},
+            university_type = #{universityType},
+            ideal_major_direction = #{idealMajorDirection},
+            region_preference = #{regionPreference},
+            daily_interest = #{dailyInterest}
         WHERE info_id = #{infoId}
     </update>
 

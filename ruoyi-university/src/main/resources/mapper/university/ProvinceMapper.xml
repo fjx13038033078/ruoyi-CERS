@@ -10,8 +10,12 @@
         <result property="numTotal" column="num_total"/>
         <result property="num985" column="num_985"/>
         <result property="num211" column="num_211"/>
-        <result property="minScoreLiberal" column="min_score_liberal"/>
-        <result property="minScoreScience" column="min_score_science"/>
+        <result property="minScoreLiberal2024" column="min_score_liberal_2024"/>
+        <result property="minScoreScience2024" column="min_score_science_2024"/>
+        <result property="minScoreLiberal2023" column="min_score_liberal_2023"/>
+        <result property="minScoreScience2023" column="min_score_science_2023"/>
+        <result property="minScoreLiberal2022" column="min_score_liberal_2022"/>
+        <result property="minScoreScience2022" column="min_score_science_2022"/>
     </resultMap>
 
     <!-- 获取所有省份的高校统计信息 -->
@@ -26,8 +30,8 @@
 
     <!-- 添加省份高校统计信息 -->
     <insert id="addProvince" parameterType="com.ruoyi.university.domain.Province">
-        INSERT INTO cers_province (province_name,num_total, num_985, num_211, min_score_liberal, min_score_science)
-        VALUES (#{provinceName},#{numTotal}, #{num985}, #{num211}, #{minScoreLiberal}, #{minScoreScience})
+        INSERT INTO cers_province (province_name,num_total, num_985, num_211, min_score_liberal_2024, min_score_science_2024, min_score_liberal_2023, min_score_science_2023, min_score_liberal_2022, min_score_science_2022)
+        VALUES (#{provinceName},#{numTotal}, #{num985}, #{num211}, #{minScoreLiberal2024}, #{minScoreScience2024}, #{minScoreLiberal2023}, #{minScoreScience2023}, #{minScoreLiberal2022}, #{minScoreScience2022})
     </insert>
 
     <!-- 更新省份高校统计信息 -->
@@ -37,8 +41,12 @@
             num_total = #{numTotal},
             num_985 = #{num985},
             num_211 = #{num211},
-            min_score_liberal = #{minScoreLiberal},
-            min_score_science = #{minScoreScience}
+            min_score_liberal_2024 = #{minScoreLiberal2024},
+            min_score_science_2024 = #{minScoreScience},
+            min_score_liberal_2023 = #{minScoreLiberal2023},
+            min_score_science_2023 = #{minScoreScience2023},
+            min_score_liberal_2022 = #{minScoreLiberal2022},
+            min_score_science_2022 = #{minScoreScience2022}
         WHERE province_id = #{provinceId}
     </update>
 

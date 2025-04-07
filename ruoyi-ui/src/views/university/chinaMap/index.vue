@@ -26,7 +26,7 @@ export default {
   mounted() {
     this.fetchProvincesData(); // 页面加载时调用接口
   },
-  methods:{
+  methods: {
     /** 获取省份高校数据 */
     async fetchProvincesData() {
       try {
@@ -37,8 +37,12 @@ export default {
             value: item.numTotal, // 高校总数
             num985: item.num985, // 985高校数
             num211: item.num211, // 211高校数
-            minScoreLiberal: item.minScoreLiberal,
-            minScoreScience: item.minScoreScience,
+            minScoreLiberal2024: item.minScoreLiberal2024,
+            minScoreScience2024: item.minScoreScience2024,
+            minScoreLiberal2023: item.minScoreLiberal2023,
+            minScoreScience2023: item.minScoreScience2023,
+            minScoreLiberal2022: item.minScoreLiberal2022,
+            minScoreScience2022: item.minScoreScience2022,
           }));
           this.initChinaMap(); // 数据加载后初始化地图
         } else {
@@ -67,13 +71,18 @@ export default {
         tooltip: {
           trigger: "item",
           formatter: (params) => {
-            const { name, data } = params;
+            const {name, data} = params;
             const value = data?.value || "暂无数据";
             const num985 = data?.num985 || "暂无数据";
             const num211 = data?.num211 || "暂无数据";
-            const minScoreLiberal = data?.minScoreLiberal || "暂无数据";
-            const minScoreScience = data?.minScoreScience || "暂无数据";
-            return `${name}<br/>省内高校总数：${value}<br/>省内985高校：${num985}<br/>省内211高校：${num211}<br/>2024历史类最低投档线：${minScoreLiberal}<br/>2024物理类最低投档线：${minScoreScience}`;
+            const minScoreLiberal2024 = data?.minScoreLiberal2024 || "暂无数据";
+            const minScoreScience2024 = data?.minScoreScience2024 || "暂无数据";
+            const minScoreLiberal2023 = data?.minScoreLiberal2023 || "暂无数据";
+            const minScoreScience2023 = data?.minScoreScience2023 || "暂无数据";
+            const minScoreLiberal2022 = data?.minScoreLiberal2022 || "暂无数据";
+            const minScoreScience2022 = data?.minScoreScience2022 || "暂无数据";
+            return `${name}<br/>省内高校总数：${value}<br/>省内985高校：${num985}<br/>省内211高校：${num211}<br/>2024历史类最低投档线：${minScoreLiberal2024}<br/>2024物理类最低投档线：${minScoreScience2024}
+<br/>2023历史类最低投档线：${minScoreLiberal2023}<br/>2023物理类最低投档线：${minScoreScience2023}<br/>2022历史类最低投档线：${minScoreLiberal2022}<br/>2022物理类最低投档线：${minScoreScience2022}`;
           },
         },
         visualMap: {

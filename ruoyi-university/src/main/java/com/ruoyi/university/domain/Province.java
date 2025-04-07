@@ -50,12 +50,32 @@ public class Province implements Serializable {
     /**
      * 2024年历史类最低投档线
      */
-    private Integer minScoreLiberal;
+    private Integer minScoreLiberal2024;
 
     /**
      * 2024年物理类最低投档线
      */
-    private Integer minScoreScience;
+    private Integer minScoreScience2024;
+
+    /**
+     * 2023年历史类最低投档线
+     */
+    private Integer minScoreLiberal2023;
+
+    /**
+     * 2023年物理类最低投档线
+     */
+    private Integer minScoreScience2023;
+
+    /**
+     * 2022年历史类最低投档线
+     */
+    private Integer minScoreLiberal2022;
+
+    /**
+     * 2022年物理类最低投档线
+     */
+    private Integer minScoreScience2022;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

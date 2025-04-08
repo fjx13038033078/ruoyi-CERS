@@ -14,7 +14,7 @@ public interface UniversityService {
      *
      * @return 高校列表
      */
-    List<University> getAllUniversities();
+    List<University> getAllUniversities(University university);
 
     /**
      * 根据高校ID获取高校信息

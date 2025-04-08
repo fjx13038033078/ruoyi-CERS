@@ -112,7 +112,7 @@ public class MajorRecommendationServiceImpl implements MajorRecommendationServic
         List<Major> allMajors = majorMapper.getAllMajors(null);
 
         // 获取所有高校信息，并转换为 Map<universityId, University>
-        List<University> allUniversities = universityService.getAllUniversities();
+        List<University> allUniversities = universityService.getAllUniversities(null);
         Map<Long, University> universityMap = allUniversities.stream()
                 .collect(Collectors.toMap(University::getUniversityId, u -> u));
 

@@ -16,7 +16,7 @@ public interface UniversityMapper {
      *
      * @return 高校信息列表
      */
-    List<University> getAllUniversities();
+    List<University> getAllUniversities(University university);
 
     /**
      * 根据高校ID获取高校信息

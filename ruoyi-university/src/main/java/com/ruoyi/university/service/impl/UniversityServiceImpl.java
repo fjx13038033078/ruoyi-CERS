@@ -27,8 +27,8 @@ public class UniversityServiceImpl implements UniversityService {
      * @return 高校列表
      */
     @Override
-    public List<University> getAllUniversities() {
-        return universityMapper.getAllUniversities();
+    public List<University> getAllUniversities(University university) {
+        return universityMapper.getAllUniversities(university);
     }
 
     /**

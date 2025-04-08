@@ -1,5 +1,28 @@
 <template>
   <div class="app-container">
+    <!-- 搜索表单 -->
+    <el-form :inline="true" :model="searchParams" class="demo-form-inline">
+      <el-form-item label="高校关键字">
+        <el-input v-model="searchParams.keyword" placeholder="请输入高校名称关键字"></el-input>
+      </el-form-item>
+      <el-form-item label="985">
+        <el-select v-model="searchParams.is985" placeholder="是否985" clearable>
+          <el-option label="是" :value="1"></el-option>
+          <el-option label="否" :value="0"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="211">
+        <el-select v-model="searchParams.is211" placeholder="是否211" clearable>
+          <el-option label="是" :value="1"></el-option>
+          <el-option label="否" :value="0"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="handleSearch">搜索</el-button>
+        <el-button @click="handleReset">重置</el-button>
+      </el-form-item>
+    </el-form>
+
     <!-- 添加高校按钮 -->
     <el-row :gutter="20" class="mb-20">
       <el-col>
@@ -202,6 +225,14 @@ export default {
         pageNum: 1,
         pageSize: 10,
       },
+      // 搜索参数
+      searchParams: {
+        keyword: '',
+        location: '',
+        type: '',
+        is985: null,
+        is211: null
+      },
       dialogVisible: false,
       viewDialogVisible: false,
       majorDialogViewVisible: false,
@@ -243,10 +274,30 @@ export default {
     schoolTypeOptions() {
       return schoolTypeOptions
     },
+    // 搜索高校
+    handleSearch() {
+      this.queryParams.pageNum = 1; // 重置页码
+      this.fetchUniversities();
+    },
+    // 重置搜索条件
+    handleReset() {
+      this.searchParams = {
+        keyword: '',
+        location: '',
+        type: '',
+        is985: null,
+        is211: null
+      };
+      this.handleSearch(); // 重置后重新加载数据
+    },
     // 获取高校列表
     fetchUniversities() {
       this.loading = true;
-      listUniversities(this.queryParams).then((response) => {
+      const params = {
+        ...this.queryParams,
+        ...this.searchParams
+      };
+      listUniversities(params).then((response) => {
         this.universityList = response.rows;
         this.total = response.total;
         this.loading = false;
@@ -379,4 +430,10 @@ export default {
 </script>
 
 <style scoped>
+.demo-form-inline {
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #f5f7fa;
+  border-radius: 4px;
+}
 </style>

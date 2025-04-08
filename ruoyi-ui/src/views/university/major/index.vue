@@ -121,5 +121,8 @@ export default {
 <style scoped>
 .demo-form-inline {
   margin-bottom: 20px;
+  padding: 10px;
+  background-color: #f5f7fa;
+  border-radius: 4px;
 }
 </style>

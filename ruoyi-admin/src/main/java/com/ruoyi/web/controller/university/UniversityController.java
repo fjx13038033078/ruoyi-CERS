@@ -25,9 +25,9 @@ public class UniversityController extends BaseController {
      * @return 高校列表
      */
     @GetMapping("/listAll")
-    public TableDataInfo listAllUniversities() {
+    public TableDataInfo listAllUniversities(University university) {
         startPage();
-        List<University> allUniversities = universityService.getAllUniversities();
+        List<University> allUniversities = universityService.getAllUniversities(university);
         return getDataTable(allUniversities);
     }
 

@@ -17,8 +17,24 @@
     </resultMap>
 
     <!-- 获取所有高校信息 -->
-    <select id="getAllUniversities" resultMap="UniversityResult">
+<!--    <select id="getAllUniversities" resultMap="UniversityResult">-->
+<!--        SELECT * FROM cers_university-->
+<!--    </select>-->
+
+    <select id="getAllUniversities" parameterType="map" resultMap="UniversityResult">
         SELECT * FROM cers_university
+        WHERE 1=1
+        <if test="keyword != null and keyword != ''">
+            AND (university_name LIKE CONCAT('%', #{keyword}, '%')
+            OR location LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
+        <if test="is985 != null">
+            AND is_985 = #{is985}
+        </if>
+        <if test="is211 != null">
+            AND is_211 = #{is211}
+        </if>
+        ORDER BY ranking ASC
     </select>
 
     <!-- 根据高校ID获取高校信息 -->

@@ -68,5 +68,8 @@ public class University implements Serializable {
     private Integer minScoreScience;
 
     @TableField(exist = false)
+    private String keyword;
+
+    @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

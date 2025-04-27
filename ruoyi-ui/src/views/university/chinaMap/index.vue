@@ -30,7 +30,7 @@ export default {
     /** 获取省份高校数据 */
     async fetchProvincesData() {
       try {
-        const response = await listProvinces({});
+        const response = await listProvinces({ pageSize: 100});
         if (response.code === 200) {
           this.mapData = response.rows.map((item) => ({
             name: item.provinceName, // 省份名称

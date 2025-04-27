@@ -42,7 +42,7 @@
             num_985 = #{num985},
             num_211 = #{num211},
             min_score_liberal_2024 = #{minScoreLiberal2024},
-            min_score_science_2024 = #{minScoreScience},
+            min_score_science_2024 = #{minScoreScience2024},
             min_score_liberal_2023 = #{minScoreLiberal2023},
             min_score_science_2023 = #{minScoreScience2023},
             min_score_liberal_2022 = #{minScoreLiberal2022},

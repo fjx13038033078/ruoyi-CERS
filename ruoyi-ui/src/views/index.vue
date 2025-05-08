@@ -99,10 +99,23 @@
           </el-card>
         </el-col>
         <el-col :span="6">
-          <el-card style="margin-right: 20px; height: 340px;">
-            <a href="https://www.16personalities.com/ch/%E4%BA%BA%E6%A0%BC%E6%B5%8B%E8%AF%95" target="_blank">
-              <img src="../assets/images/04.jpg" alt="Single Image" style="width: 95%; height: 90%; object-fit: cover;">
-            </a>
+          <el-card style="margin-right: 20px; height: 340px;" class="mbti-card">
+            <div class="mbti-content">
+              <div class="mbti-image">
+                <img src="../assets/images/04.jpg" alt="MBTI测试" style="width: 100%; height: 100%; object-fit: cover;">
+              </div>
+              <div class="mbti-overlay">
+                <h3>MBTI 性格测试</h3>
+                <p>了解你的性格类型</p>
+                <el-button 
+                  type="primary" 
+                  class="mbti-button"
+                  @click="window.open('https://www.16personalities.com/ch/%E4%BA%BA%E6%A0%BC%E6%B5%8B%E8%AF%95', '_blank')"
+                >
+                  开始测试
+                </el-button>
+              </div>
+            </div>
           </el-card>
         </el-col>
       </el-row>
@@ -426,5 +439,86 @@ export default {
   height: auto;
   display: block;
   margin: 0 auto;
+}
+
+.mbti-card {
+  overflow: hidden;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    
+    .mbti-overlay {
+      opacity: 1;
+    }
+  }
+}
+
+.mbti-content {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+.mbti-image {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  
+  img {
+    transition: transform 0.3s ease;
+  }
+  
+  &:hover img {
+    transform: scale(1.05);
+  }
+}
+
+.mbti-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: all 0.3s ease;
+  color: white;
+  padding: 20px;
+  
+  h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  
+  p {
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: rgba(255, 255, 255, 0.8);
+  }
+}
+
+.mbti-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  padding: 10px 25px;
+  font-size: 16px;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(118, 75, 162, 0.4);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
 }
 </style>

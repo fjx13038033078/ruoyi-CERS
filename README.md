@@ -42,7 +42,6 @@
 |----------------------|----------------------|
 | ![map](./screenshots/login.png) | ![recommend](./screenshots/register.png) |
 | 地图可视化            | 智能推荐页面          |
-|||
 | ![map](./screenshots/map.png) | ![recommend](./screenshots/recommend.png) |
 
 

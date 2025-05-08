@@ -122,38 +122,125 @@
       <!-- 通知公告 -->
       <el-row style="margin-top: 20px;">
         <el-col :span="12">
-          <el-card style="margin-right: 20px; height: 420px;">
-            <h3 slot="header">通知公告</h3>
-            <el-table v-loading="loading" :data="noticeList">
-              <el-table-column label="序号" align="center" prop="noticeId" width="100"/>
-              <el-table-column
-                label="公告标题"
-                align="center"
-                prop="noticeTitle"
-                :show-overflow-tooltip="true"
+          <el-card style="margin-right: 20px; height: 420px;" class="notice-list-card">
+            <div slot="header" class="intro-header">
+              <h3>通知公告</h3>
+              <div class="intro-divider"></div>
+            </div>
+            <div class="notice-content">
+              <el-table 
+                v-loading="loading" 
+                :data="noticeList"
+                :header-cell-style="{
+                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  color: 'white',
+                  fontWeight: 'bold'
+                }"
+                class="notice-table"
               >
-                <template slot-scope="scope">
-                  <span @click="showNoticeContent(scope.row)">{{ scope.row.noticeTitle }}</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="公告类型" align="center" prop="noticeType" width="100">
-                <template slot-scope="scope">
-                  <dict-tag :options="dict.type.sys_notice_type" :value="scope.row.noticeType"/>
-                </template>
-              </el-table-column>
-              <el-table-column label="创建时间" align="center" prop="createTime" width="100">
-                <template slot-scope="scope">
-                  <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
-                </template>
-              </el-table-column>
-            </el-table>
+                <el-table-column 
+                  label="序号" 
+                  align="center" 
+                  prop="noticeId" 
+                  width="80"
+                >
+                  <template slot-scope="scope">
+                    <div class="notice-id">{{ scope.row.noticeId }}</div>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="公告标题"
+                  align="left"
+                  prop="noticeTitle"
+                  :show-overflow-tooltip="true"
+                >
+                  <template slot-scope="scope">
+                    <div class="notice-title" @click="showNoticeContent(scope.row)">
+                      <i class="el-icon-bell notice-icon"></i>
+                      <span>{{ scope.row.noticeTitle }}</span>
+                    </div>
+                  </template>
+                </el-table-column>
+                <el-table-column 
+                  label="公告类型" 
+                  align="center" 
+                  prop="noticeType" 
+                  width="100"
+                >
+                  <template slot-scope="scope">
+                    <el-tag 
+                      :class="['notice-type-tag', 
+                        scope.row.noticeType === '1' ? 'type-notice' : 'type-announcement']"
+                    >
+                      <i :class="scope.row.noticeType === '1' ? 'el-icon-bell' : 'el-icon-message'"></i>
+                      <dict-tag :options="dict.type.sys_notice_type" :value="scope.row.noticeType"/>
+                    </el-tag>
+                  </template>
+                </el-table-column>
+                <el-table-column 
+                  label="发布时间" 
+                  align="center" 
+                  prop="createTime" 
+                  width="100"
+                >
+                  <template slot-scope="scope">
+                    <div class="notice-time">
+                      {{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}
+                    </div>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
           </el-card>
         </el-col>
 
         <el-col :span="12">
-          <el-card style="margin-right: 20px; height: 420px;">
-            <h3 slot="header">系统简介</h3>
-            <p>请在这里填写更多的文字说明</p>
+          <el-card style="margin-right: 20px; height: 420px;" class="system-intro-card">
+            <div slot="header" class="intro-header">
+              <h3>系统简介</h3>
+              <div class="intro-divider"></div>
+            </div>
+            <div class="system-intro-content">
+              <div class="intro-section">
+                <div class="intro-icon">
+                  <i class="el-icon-aim"></i>
+                </div>
+                <div class="intro-text">
+                  <h4>智能推荐</h4>
+                  <p>基于内容的推荐算法和协同过滤推挤算法，为考生提供个性化的高校和专业推荐，助力精准志愿填报。</p>
+                </div>
+              </div>
+              
+              <div class="intro-section">
+                <div class="intro-icon">
+                  <i class="el-icon-data-analysis"></i>
+                </div>
+                <div class="intro-text">
+                  <h4>数据分析</h4>
+                  <p>整合历年高考数据，结合院校特色、专业优势、就业前景等多维度信息，提供全面的决策支持。</p>
+                </div>
+              </div>
+              
+              <div class="intro-section">
+                <div class="intro-icon">
+                  <i class="el-icon-user"></i>
+                </div>
+                <div class="intro-text">
+                  <h4>个性匹配</h4>
+                  <p>通过MBTI性格测试和兴趣评估，帮助考生找到最适合自己的专业方向和职业发展路径。</p>
+                </div>
+              </div>
+              
+              <div class="intro-section">
+                <div class="intro-icon">
+                  <i class="el-icon-connection"></i>
+                </div>
+                <div class="intro-text">
+                  <h4>信息共享</h4>
+                  <p>提供院校库、专业库等丰富的信息资源，助力考生和家长做出更明智的选择。</p>
+                </div>
+              </div>
+            </div>
           </el-card>
         </el-col>
       </el-row>
@@ -519,6 +606,222 @@ export default {
   
   &:active {
     transform: translateY(0);
+  }
+}
+
+.system-intro-card, .notice-list-card {
+  .intro-header {
+    position: relative;
+    text-align: center;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+
+    h3 {
+      font-size: 22px;
+      color: #303133;
+      margin: 0;
+      font-weight: 600;
+    }
+
+    .intro-divider {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      border-radius: 3px;
+    }
+  }
+}
+
+.system-intro-card {
+  .system-intro-content {
+    padding: 10px;
+    height: calc(100% - 60px);
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #dcdfe6;
+      border-radius: 3px;
+    }
+  }
+
+  .intro-section {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 25px;
+    padding: 15px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      background: rgba(102, 126, 234, 0.05);
+      transform: translateX(5px);
+    }
+
+    .intro-icon {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+      
+      i {
+        font-size: 20px;
+        color: white;
+      }
+    }
+
+    .intro-text {
+      flex-grow: 1;
+
+      h4 {
+        margin: 0 0 8px 0;
+        font-size: 16px;
+        color: #303133;
+      }
+
+      p {
+        margin: 0;
+        font-size: 14px;
+        color: #606266;
+        line-height: 1.6;
+      }
+    }
+  }
+}
+
+.notice-list-card {
+  .notice-content {
+    height: calc(100% - 60px);
+    overflow-y: auto;
+    
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: #dcdfe6;
+      border-radius: 3px;
+    }
+  }
+
+  .notice-table {
+    ::v-deep .el-table__header-wrapper {
+      th {
+        padding: 8px 0;
+        
+        .cell {
+          font-size: 14px;
+        }
+      }
+    }
+    
+    ::v-deep .el-table__body-wrapper {
+      tr {
+        transition: all 0.3s ease;
+        
+        &:hover {
+          background-color: rgba(102, 126, 234, 0.05) !important;
+          transform: translateX(5px);
+        }
+      }
+    }
+  }
+
+  .notice-id {
+    font-weight: bold;
+    color: #606266;
+  }
+
+  .notice-title {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 5px 0;
+    transition: all 0.3s ease;
+    
+    .notice-icon {
+      color: #764ba2;
+      margin-right: 8px;
+      font-size: 16px;
+    }
+    
+    span {
+      color: #303133;
+      
+      &:hover {
+        color: #764ba2;
+      }
+    }
+  }
+
+  .notice-time {
+    font-size: 13px;
+    color: #909399;
+  }
+
+  .notice-type-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    border-radius: 15px;
+    border: none;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    
+    i {
+      margin-right: 4px;
+      font-size: 14px;
+    }
+    
+    &.type-notice {
+      background: linear-gradient(45deg, #36d1dc, #5b86e5);
+      color: white;
+      box-shadow: 0 2px 6px rgba(91, 134, 229, 0.3);
+      
+      &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(91, 134, 229, 0.4);
+      }
+    }
+    
+    &.type-announcement {
+      background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+      color: white;
+      box-shadow: 0 2px 6px rgba(255, 154, 158, 0.3);
+      
+      &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(255, 154, 158, 0.4);
+      }
+    }
+  }
+
+  ::v-deep .el-tag {
+    background-color: transparent;
+    border: none;
+    color: inherit;
+    
+    .el-tag__close {
+      color: white;
+      
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+        color: white;
+      }
+    }
   }
 }
 </style>

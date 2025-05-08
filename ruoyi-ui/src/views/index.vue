@@ -173,7 +173,7 @@
                         scope.row.noticeType === '1' ? 'type-notice' : 'type-announcement']"
                     >
                       <i :class="scope.row.noticeType === '1' ? 'el-icon-bell' : 'el-icon-message'"></i>
-                      <dict-tag :options="dict.type.sys_notice_type" :value="scope.row.noticeType"/>
+                      {{ scope.row.noticeType === '1' ? '通知' : '公告' }}
                     </el-tag>
                   </template>
                 </el-table-column>

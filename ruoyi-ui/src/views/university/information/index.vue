@@ -6,7 +6,7 @@
           <el-button type="primary" @click="handleAddInfo" v-hasPermi="['university:information:add']">新增报名信息</el-button>
         </el-col>
       </el-row>
-
+  
       <!-- 信息列表 -->
       <el-table :data="infoList" v-loading="loading" border style="width: 100%">
         <el-table-column label="信息ID" prop="infoId" align="center"></el-table-column>
@@ -30,7 +30,7 @@
           </template>
         </el-table-column>
       </el-table>
-
+  
       <!-- 分页组件 -->
       <pagination
         v-show="total > 0"
@@ -39,7 +39,7 @@
         :limit.sync="queryParams.pageSize"
         @pagination="fetchInfoList"
       />
-
+  
       <!-- 添加/编辑信息对话框 -->
       <el-dialog :visible.sync="dialogVisible" :title="dialogTitle" width="600px">
         <el-form :model="infoForm" label-width="140px">
@@ -118,7 +118,7 @@
           <el-button type="primary" @click="handleSubmit">{{ dialogButtonText }}</el-button>
         </div>
       </el-dialog>
-
+  
       <!-- 查看信息详情对话框 -->
       <el-dialog :visible.sync="viewDialogVisible" title="报名信息详情" width="60%">
         <el-form :model="viewInfoForm" label-width="140px">
@@ -153,10 +153,10 @@
       </el-dialog>
     </div>
   </template>
-
+  
   <script>
   import { listAllInformation, getInformation, addInformation, updateInformation, deleteInformation } from "@/api/university/information";
-
+  
   export default {
     data() {
       return {
@@ -321,7 +321,7 @@
     }
   };
   </script>
-
+  
   <style scoped>
   .mb-20 {
     margin-bottom: 20px;

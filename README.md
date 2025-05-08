@@ -40,7 +40,12 @@
 
 | 登录            | 注册          |
 |----------------------|----------------------|
-| ![map](./screenshots/login.png) | ![recommend](./screenshots/register.png) |
+| ![login](./screenshots/login.png) | ![register](./screenshots/register.png) |
+
+| 高校            | 专业          |
+|----------------------|----------------------|
+| ![university](./screenshots/university.png) | ![major](./screenshots/major.png) |
+
 
 | 地图可视化            | 智能推荐页面          |
 |----------------------|----------------------|

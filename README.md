@@ -68,6 +68,8 @@ git clone https://github.com/your-username/gaokao-advisor.git
 # 导入后端 SpringBoot 项目，配置好数据库
 # 导入前端 Vue 项目，运行 npm install & npm run dev
 
+---
+
 ## 📬 联系作者
 
 如果你对本系统感兴趣，或者有以下需求：

@@ -42,9 +42,13 @@
 |----------------------|----------------------|
 | ![login](./screenshots/login.png) | ![register](./screenshots/register.png) |
 
-| 高校            | 专业          |
+| 高校列表            | 专业列表          |
 |----------------------|----------------------|
 | ![university](./screenshots/university.png) | ![major](./screenshots/major.png) |
+
+| 管理员首页            | 用户首页          |
+|----------------------|----------------------|
+| ![admin](./screenshots/index2.png) | ![user](./screenshots/index1.png) |
 
 
 | 地图可视化            | 智能推荐页面          |

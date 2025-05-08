@@ -14,8 +14,8 @@
 
 ## 🚀 技术架构
 
-- **前端**：Vue 3 + ECharts + Element Plus
-- **后端**：Spring Boot + MyBatis-Plus + MySQL
+- **前端**：Vue 2 + ECharts + Element UI
+- **后端**：Spring Boot + MyBatis + MySQL
 - **可视化**：中国地图热力图，展示高校资源分布
 - **推荐算法**：基于分数线、地区、专业热度进行智能匹配（持续优化中）
 

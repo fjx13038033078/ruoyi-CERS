@@ -66,6 +66,9 @@ git clone https://github.com/fjx13038033078/ruoyi-CERS.git
 
 # 导入后端 SpringBoot 项目，配置好数据库
 # 导入前端 Vue 项目，运行 npm install & npm run dev
+
+# 管理员账号：admin 密码：admin123
+# 普通用户账号：zhangsan 密码：123456 
 ```
 
 

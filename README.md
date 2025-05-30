@@ -83,5 +83,12 @@ git clone https://github.com/fjx13038033078/ruoyi-CERS.git
 **📧 联系方式：** `c1111111c@163.com`  
 **💬 微信 ：** `445981543`  
 
+## ☕ 支持作者
+
+如果你觉得本项目对你有帮助，欢迎请作者喝杯咖啡，支持项目持续更新！🎉
+
+<img src="screenshots/wechat_donate.png" alt="微信收款码" width="300" />
+
+**📱 微信收款码**
 
 

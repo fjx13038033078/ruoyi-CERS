@@ -32,6 +32,12 @@ public class MajorRecommendationServiceImpl implements MajorRecommendationServic
     private static final int SCORE_RANGE_STRICT = 20; // 严格分数范围
     private static final int SCORE_RANGE_MODERATE = 40; // 中等分数范围
     private static final int SCORE_RANGE_LOOSE = 60; // 宽松分数范围
+    
+    // 融合推荐的参数常量
+    private static final int MAX_FINAL_RECOMMENDATIONS = 12; // 最终推荐数量
+    private static final double CF_BASE_WEIGHT = 0.6; // 协同过滤基础权重
+    private static final double CONTENT_BASE_WEIGHT = 0.4; // 基于内容基础权重
+    private static final int MIN_ACTIONS_FOR_CF = 3; // 协同过滤生效的最小行为数量
 
     private final MajorMapper majorMapper;
 
@@ -43,25 +49,16 @@ public class MajorRecommendationServiceImpl implements MajorRecommendationServic
 
     @Override
     public List<Major> getCombinedRecommendations() {
-        // 获取协同过滤推荐结果
-        List<Major> cfRecommendations = this.getCFRecommendations();
-
-        // 获取基于用户画像的推荐结果
         Long userId = SecurityUtils.getUserId();
+        
+        // 获取两种推荐结果
+        List<Major> cfRecommendations = this.getCFRecommendations();
         List<Major> infoRecommendations = this.getRecommendedMajorsByInfo(userId);
-        log.info("infoRecommendations:{}", infoRecommendations);
+        
+        log.info("协同过滤推荐 {} 个，基于内容推荐 {} 个", cfRecommendations.size(), infoRecommendations.size());
 
-        // 合并结果并去重（根据专业ID去重）
-        return Stream.concat(cfRecommendations.stream(), infoRecommendations.stream())
-                .filter(Objects::nonNull) // 过滤空值
-                .collect(Collectors.collectingAndThen(
-                        Collectors.toMap(
-                                Major::getMajorId, // 以专业ID为唯一标识
-                                major -> major,
-                                (existing, replacement) -> existing // 重复时保留前者
-                        ),
-                        map -> new ArrayList<>(map.values())
-                ));
+        // 智能融合推荐结果
+        return intelligentFusion(userId, cfRecommendations, infoRecommendations);
     }
 
     @Override
@@ -255,5 +252,145 @@ public class MajorRecommendationServiceImpl implements MajorRecommendationServic
         } else {
             return university.getIs985() == 0 && university.getIs211() == 0; // 普通高校
         }
+    }
+
+    /**
+     * 智能融合两种推荐结果
+     */
+    private List<Major> intelligentFusion(Long userId, List<Major> cfRecommendations, List<Major> infoRecommendations) {
+        // 1. 计算用户行为数据丰富程度
+        int userActionCount = getUserActionCount(userId);
+        
+        // 2. 根据数据丰富程度动态调整权重
+        double cfWeight = calculateCFWeight(userActionCount);
+        double contentWeight = calculateContentWeight(userId);
+        
+        log.info("融合权重 - 协同过滤: {}, 基于内容: {}, 用户行为数: {}", cfWeight, contentWeight, userActionCount);
+
+        // 3. 为推荐结果计算综合评分
+        Map<Long, MajorWithScore> scoredMajors = new HashMap<>();
+        
+        // 协同过滤结果评分（排名越靠前评分越高）
+        for (int i = 0; i < cfRecommendations.size(); i++) {
+            Major major = cfRecommendations.get(i);
+            double rankScore = 1.0 - (i * 0.1); // 排名衰减因子
+            double finalScore = cfWeight * rankScore;
+            scoredMajors.put(major.getMajorId(), 
+                new MajorWithScore(major, finalScore, "CF", i + 1));
+        }
+        
+        // 基于内容结果评分
+        for (int i = 0; i < infoRecommendations.size(); i++) {
+            Major major = infoRecommendations.get(i);
+            Long majorId = major.getMajorId();
+            double rankScore = 1.0 - (i * 0.1);
+            double finalScore = contentWeight * rankScore;
+            
+            if (scoredMajors.containsKey(majorId)) {
+                // 同一专业被两种算法推荐，累加评分并提升权重
+                MajorWithScore existing = scoredMajors.get(majorId);
+                double boostedScore = existing.getScore() + finalScore + 0.2; // 额外加分
+                scoredMajors.put(majorId, 
+                    new MajorWithScore(major, boostedScore, existing.getSource() + "+CONTENT", 
+                                     Math.min(existing.getRank(), i + 1)));
+                log.debug("专业 {} 被两种算法推荐，提升评分: {}", majorId, boostedScore);
+            } else {
+                scoredMajors.put(majorId, 
+                    new MajorWithScore(major, finalScore, "CONTENT", i + 1));
+            }
+        }
+
+        // 4. 按综合评分排序并限制数量
+        List<Major> finalResults = scoredMajors.values().stream()
+                .sorted((a, b) -> {
+                    // 首先按评分排序
+                    int scoreComparison = Double.compare(b.getScore(), a.getScore());
+                    if (scoreComparison != 0) {
+                        return scoreComparison;
+                    }
+                    // 评分相同时按原始排名排序
+                    return Integer.compare(a.getRank(), b.getRank());
+                })
+                .limit(MAX_FINAL_RECOMMENDATIONS)
+                .map(MajorWithScore::getMajor)
+                .collect(Collectors.toList());
+
+        log.info("最终融合推荐 {} 个专业", finalResults.size());
+        return finalResults;
+    }
+
+    /**
+     * 计算协同过滤权重
+     */
+    private double calculateCFWeight(int userActionCount) {
+        if (userActionCount == 0) {
+            return 0.0; // 新用户，完全依赖基于内容
+        } else if (userActionCount < MIN_ACTIONS_FOR_CF) {
+            return 0.2; // 数据稀疏，降低协同过滤权重
+        } else if (userActionCount < 10) {
+            return 0.4; // 数据中等，中等权重
+        } else if (userActionCount < 20) {
+            return CF_BASE_WEIGHT; // 数据充足，使用基础权重
+        } else {
+            return 0.7; // 数据丰富，提高协同过滤权重
+        }
+    }
+
+    /**
+     * 计算基于内容推荐权重
+     */
+    private double calculateContentWeight(Long userId) {
+        try {
+            Information userInfo = informationService.getInformationByUserId(userId);
+            if (userInfo == null) {
+                return 0.8; // 无画像信息时，主要依靠通用推荐逻辑
+            }
+            
+            double weight = CONTENT_BASE_WEIGHT;
+            // 根据用户信息完整度调整权重
+            if (userInfo.getScore() != null) weight += 0.1;
+            if (userInfo.getSubject() != null) weight += 0.1;
+            if (userInfo.getUniversityLevel() != null) weight += 0.1;
+            
+            return Math.min(weight, 0.8); // 最大不超过0.8
+        } catch (Exception e) {
+            log.warn("获取用户信息失败，使用默认权重", e);
+            return CONTENT_BASE_WEIGHT;
+        }
+    }
+
+    /**
+     * 获取用户行为数量
+     */
+    private int getUserActionCount(Long userId) {
+        try {
+            List<Map<String, Object>> userActions = storeupMapper.selectUserActions(userId, null, null);
+            return userActions != null ? userActions.size() : 0;
+        } catch (Exception e) {
+            log.warn("获取用户行为数据失败", e);
+            return 0;
+        }
+    }
+
+    /**
+     * 推荐结果评分辅助类
+     */
+    private static class MajorWithScore {
+        private final Major major;
+        private final double score;
+        private final String source;
+        private final int rank;
+
+        public MajorWithScore(Major major, double score, String source, int rank) {
+            this.major = major;
+            this.score = score;
+            this.source = source;
+            this.rank = rank;
+        }
+
+        public Major getMajor() { return major; }
+        public double getScore() { return score; }
+        public String getSource() { return source; }
+        public int getRank() { return rank; }
     }
 }

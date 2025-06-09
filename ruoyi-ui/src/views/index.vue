@@ -110,7 +110,7 @@
                 <el-button 
                   type="primary" 
                   class="mbti-button"
-                  @click="window.open('https://www.16personalities.com/ch/%E4%BA%BA%E6%A0%BC%E6%B5%8B%E8%AF%95', '_blank')"
+                  @click="openMbtiTest"
                 >
                   开始测试
                 </el-button>
@@ -403,6 +403,56 @@ export default {
         }
       };
       myChart.setOption(option);
+    },
+    openMbtiTest() {
+      // 使用更安全的方式打开新窗口
+      try {
+        const url = 'https://www.16personalities.com/ch/人格测试';
+        const newWindow = window.open(url, '_blank');
+        
+        // 检查是否被浏览器阻止弹窗
+        if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+          // 如果弹窗被阻止，提示用户手动打开
+          this.$message({
+            message: '浏览器阻止了弹窗，请手动复制链接访问：' + url,
+            type: 'warning',
+            duration: 5000,
+            showClose: true
+          });
+          
+          // 同时尝试复制链接到剪贴板
+          this.copyToClipboard(url);
+        }
+      } catch (error) {
+        console.error('打开MBTI测试页面失败:', error);
+        this.$message.error('打开测试页面失败，请稍后重试');
+      }
+    },
+    copyToClipboard(text) {
+      // 复制链接到剪贴板
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(() => {
+          this.$message.success('链接已复制到剪贴板');
+        }).catch(() => {
+          this.fallbackCopyToClipboard(text);
+        });
+      } else {
+        this.fallbackCopyToClipboard(text);
+      }
+    },
+    fallbackCopyToClipboard(text) {
+      // 兼容性方案：创建临时textarea元素
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        this.$message.success('链接已复制到剪贴板');
+      } catch (error) {
+        console.error('复制失败:', error);
+      }
+      document.body.removeChild(textarea);
     }
   }
 };

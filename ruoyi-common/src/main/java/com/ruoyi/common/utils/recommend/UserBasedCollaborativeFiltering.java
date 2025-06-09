@@ -11,6 +11,11 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 public class UserBasedCollaborativeFiltering {
+    // 推荐算法优化常量
+    private static final double SIMILARITY_THRESHOLD = 0.1; // 相似度阈值，过滤掉相似度过低的用户
+    private static final int MAX_RECOMMENDATIONS = 10; // 最大推荐数量
+    private static final int MAX_SIMILAR_USERS = 20; // 最大相似用户数量，减少计算量
+
     // 用户评分数据，Map存储用户对物品的评分，Map<用户ID(Long), Map<物品ID(Long), 评分(Double)>>
     private Map<Long, Map<Long, Double>> userRatings;
 
@@ -97,67 +102,96 @@ public class UserBasedCollaborativeFiltering {
     }
 
     /**
-     * 根据目标用户，计算并推荐物品。
+     * 根据目标用户，计算并推荐物品（优化版本）。
      *
      * @param targetUser 目标用户ID（Long类型）
-     * @param numRecommendations 推荐物品的数量
+     * @param numRecommendations 推荐物品的数量（最大为10）
      * @return 推荐的物品ID列表
      */
     public List<Long> recommendItems(Long targetUser, int numRecommendations) {
-        // 存储目标用户与其他用户的相似度
+        // 限制推荐数量不超过10
+        numRecommendations = Math.min(numRecommendations, MAX_RECOMMENDATIONS);
+        
+        // 提前获取目标用户的评分数据，防止 NullPointerException
+        Map<Long, Double> targetUserRatings = userRatings.get(targetUser);
+        if (targetUserRatings == null || targetUserRatings.isEmpty()) {
+            log.warn("目标用户 {} 没有评分数据，无法进行推荐", targetUser);
+            return new ArrayList<>();
+        }
+
+        // 存储目标用户与其他用户的相似度（只存储超过阈值的）
         Map<Long, Double> userSimilarities = new HashMap<>();
 
-        // 计算目标用户与其他所有用户的相似度
+        // 计算目标用户与其他所有用户的相似度（优化：添加相似度阈值过滤）
         for (Long user : userRatings.keySet()) {
             if (!user.equals(targetUser)) {
                 double similarity = calculateSimilarity(targetUser, user);
-                userSimilarities.put(user, similarity);
-            }
-        }
-
-        // 根据相似度对用户进行排序，从高到低
-        List<Map.Entry<Long, Double>> sortedSimilarities = new ArrayList<>(userSimilarities.entrySet());
-        sortedSimilarities.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
-
-        // 选择与目标用户最相似的若干个用户
-        List<Long> similarUsers = new ArrayList<>();
-        for (int i = 0; i < numRecommendations; i++) {
-            if (i < sortedSimilarities.size()) {
-                similarUsers.add(sortedSimilarities.get(i).getKey());
-            } else {
-                break;
-            }
-        }
-        log.info("similarUsers:{}", similarUsers);
-
-        // **提前获取 targetUser 的评分数据，防止 NullPointerException**
-        Map<Long, Double> targetUserRatings = userRatings.get(targetUser);
-        if (targetUserRatings == null) {
-            targetUserRatings = new HashMap<>(); // 避免 NullPointerException
-        }
-
-        // 获取相似用户喜欢的物品，进行推荐
-        Map<Long, Double> recommendations = new HashMap<>();
-        for (Long user : similarUsers) {
-            Map<Long, Double> ratings = userRatings.get(user);
-            if (ratings == null) {
-                continue; // 防止 NullPointerException
-            }
-            for (Long item : ratings.keySet()) {
-                // **检查目标用户是否已经评价该物品**
-                if (!targetUserRatings.containsKey(item)) {
-                    recommendations.put(item, ratings.get(item));
+                // 只保留相似度超过阈值的用户
+                if (similarity > SIMILARITY_THRESHOLD) {
+                    userSimilarities.put(user, similarity);
                 }
             }
         }
 
-        // 按评分排序，取前N个推荐物品
-        LinkedHashMap<Long, Double> sortedRecommendations = recommendations.entrySet()
+        if (userSimilarities.isEmpty()) {
+            log.warn("没有找到与用户 {} 相似度超过阈值的用户", targetUser);
+            return new ArrayList<>();
+        }
+
+        // 根据相似度对用户进行排序，从高到低，并限制相似用户数量
+        List<Long> similarUsers = userSimilarities.entrySet()
+                .stream()
+                .sorted(Map.Entry.<Long, Double>comparingByValue().reversed())
+                .limit(MAX_SIMILAR_USERS) // 限制相似用户数量，提高效率
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+
+        log.info("找到 {} 个相似用户", similarUsers.size());
+
+        // 获取相似用户喜欢的物品，进行推荐（优化：使用加权评分）
+        Map<Long, Double> recommendations = new HashMap<>();
+        for (Long user : similarUsers) {
+            Map<Long, Double> ratings = userRatings.get(user);
+            if (ratings == null) {
+                continue;
+            }
+            
+            double userSimilarity = userSimilarities.get(user);
+            for (Map.Entry<Long, Double> entry : ratings.entrySet()) {
+                Long item = entry.getKey();
+                Double rating = entry.getValue();
+                
+                // 检查目标用户是否已经评价该物品
+                if (!targetUserRatings.containsKey(item)) {
+                    // 使用相似度加权评分
+                    Double weightedRating = rating * userSimilarity;
+                    recommendations.merge(item, weightedRating, Double::sum);
+                }
+            }
+        }
+
+        if (recommendations.isEmpty()) {
+            log.warn("没有找到可推荐的物品给用户 {}", targetUser);
+            return new ArrayList<>();
+        }
+
+        // 按加权评分排序，取前N个推荐物品
+        List<Long> result = recommendations.entrySet()
                 .stream()
                 .sorted(Map.Entry.<Long, Double>comparingByValue().reversed())
                 .limit(numRecommendations)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
 
-        return new ArrayList<>(sortedRecommendations.keySet());
+        log.info("为用户 {} 推荐了 {} 个物品", targetUser, result.size());
+        return result;
+    }
+    
+    /**
+     * 获取默认推荐（限制为10个）
+     */
+    public List<Long> recommendItems(Long targetUser) {
+        return recommendItems(targetUser, MAX_RECOMMENDATIONS);
     }
 }
+

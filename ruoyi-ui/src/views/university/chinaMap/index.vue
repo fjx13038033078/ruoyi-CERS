@@ -86,8 +86,8 @@ export default {
           },
         },
         visualMap: {
-          min: 10,
-          max: 100,
+          min: 20,
+          max: 200,
           left: "left",
           top: "bottom",
           text: ["高", "低"], // 文本

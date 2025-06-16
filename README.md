@@ -1,8 +1,8 @@
 # 🎓 高考志愿智能推荐系统 | Smart Gaokao Advisor
 
-![GitHub](https://img.shields.io/github/license/ruoyi-CERS/gkvr_system_frontend)
+![GitHub](https://img.shields.io/github/license/fjx13038033078/ruoyi-CERS)
 ![node.js version](https://img.shields.io/badge/nodejs-18+-orange.svg)
-![GitHub Repo stars](https://img.shields.io/github/stars/ruoyi-CERS/gkvr_system_frontend)
+![GitHub Repo stars](https://img.shields.io/github/stars/fjx13038033078/ruoyi-CERS)
 
 基于 SpringBoot + Vue 的高考志愿智能推荐系统，结合高校录取线、985/211 分布、院校排名和专业前景等多维数据，帮助你做出更明智的选择！
 

@@ -105,6 +105,5 @@ git clone https://github.com/fjx13038033078/ruoyi-CERS.git
 
 <img src="screenshots/wechat_donate.png" alt="微信收款码" width="300" />
 
-**📱 微信收款码**
 
 
